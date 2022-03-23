@@ -16,6 +16,7 @@ public class AppFacade : Facade
         RegisterCommand(PublicDefine.frameWorkCmd_StartUp,()=>new StartUpCommand());
         RegisterCommand(PublicDefine.frameWorkCmd_LoadScene, () => new LoadSceneCommand());
         RegisterCommand(PublicDefine.frameWorkCmd_LoadSceneComplete, () => new LoadSceneCompleteCommand());
+        RegisterCommand(PublicDefine.frameWorkCmd_OpenPanel, () => new OpenPanelCommand());
         SendNotification(PublicDefine.frameWorkCmd_StartUp);
         RemoveCommand(PublicDefine.frameWorkCmd_StartUp);
     }

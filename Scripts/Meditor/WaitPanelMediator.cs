@@ -5,7 +5,7 @@ using PureMVC.Patterns.Mediator;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaitPanelMediator : Mediator
+public class WaitPanelMediator : Mediator,IPanel
 {
     public new const string NAME = "WaitPanelMediator";
 
@@ -27,22 +27,53 @@ public class WaitPanelMediator : Mediator
         switch (notification.Name)
         {
             case PublicDefine.frameWorkMsg_Wait:
-                string _text = (string)notification.Body;
-                txtHint.text = _text;
+                Update(notification.Body);
                 break;
             default:
                 break;
         }
+        Debug.Log(NAME + ":收到" + notification.Name + "消息");
     }
 
     public override void OnRegister()
     {
-        base.OnRegister();
+        Debug.Log(NAME + ":注册成功");
     }
 
     public override void OnRemove()
     {
-        base.OnRemove();
+        Debug.Log(NAME + ":移除成功");
     }
 
+    public void Update(object data)
+    {
+        string _text = (string)data;
+        txtHint.text = _text;
+    }
+
+
+
+    public void Show(bool immediately=false)
+    {
+        if (immediately)
+        {
+
+        }
+        else
+        {
+            
+        }
+    }
+
+    public void Hide(bool immediately=false)
+    {
+        if (immediately)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
 }

@@ -8,6 +8,7 @@ public class StartUpCommand : SimpleCommand
 {
     public override void Execute(INotification notification)
     {
-        SendNotification(PublicDefine.frameWorkCmd_LoadScene,"Login");
+        //SendNotification(PublicDefine.frameWorkCmd_LoadScene,"Login");
+        SendNotification(PublicDefine.frameWorkCmd_OpenPanel, PanelType.WaitPanel);
     }
 }
