@@ -20,6 +20,7 @@ public class PublicDefine : MonoBehaviour
 
 
     public const string frameWorkMsg_LoadSceneProgress = "frameWorkMsg_LoadSceneProgress";
+    public const string frameWorkMsg_UpdateUserData = "frameWorkMsg_UpdateUserData";
 
     #endregion
 

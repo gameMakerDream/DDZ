@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Util
 {
-
     public static Transform FindDeepChid(Transform parent,string childName)
     {
         Transform _child = parent.Find(childName);
@@ -25,5 +24,14 @@ public class Util
         return FindDeepChid(parent, childName).GetComponent<T>();
     }
 
+    public static string Number2String(float number)
+    {
+        if (number < 10000)
+            return number.ToString("f2");
+        int count = ((int)number).ToString().Length-5;
+        if(count<4)
+             return (number / 10000).ToString("f2")+"w";
+        return (number / 100000000).ToString("f2") + "y";
 
+    }
 }
