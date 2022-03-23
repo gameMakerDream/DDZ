@@ -6,6 +6,7 @@ public class UserData
 {
     public string userId;
     public string nickName;
+    public int iconIndex;
     public float coin;
     public float currency;
 }

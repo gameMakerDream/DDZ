@@ -8,7 +8,7 @@ public class LoadSceneCommand : SimpleCommand
 {
     public override void Execute(INotification notification)
     {
-        string sceneName = (string) notification.Body;
+        string _sceneName = (string) notification.Body;
         switch (SceneMgr.instance.CurrentSceneName)
         {
             case "Login":
@@ -22,6 +22,6 @@ public class LoadSceneCommand : SimpleCommand
             default:
                 break;
         }
-        SceneMgr.instance.LoadSceneAsync(sceneName);
+        SceneMgr.instance.LoadSceneAsync(_sceneName);
     }
 }
