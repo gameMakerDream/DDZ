@@ -5,15 +5,19 @@ using PureMVC.Patterns.Mediator;
 using PureMVC.Interfaces;
 using UnityEngine.UI;
 
-public class LoadingMediator : Mediator
+public class LoadingMediator : Mediator,IUpdater
 {
 
     public new const string NAME = "LoadingMediator";
-
-    private Text txtProgress;
-    public LoadingMediator(GameObject viewComponent) : base(NAME, viewComponent)
+    public GameObject view
     {
-        txtProgress = Util.FindDeepChildAndGetComponent<Text>(viewComponent.transform, "Text");
+        get { return (GameObject)ViewComponent; }
+    }
+    private Text txtProgress;
+
+    public LoadingMediator(object viewComponent) : base(NAME, viewComponent)
+    {
+        txtProgress = Util.FindDeepChildAndGetComponent<Text>(view.transform, "Text");
        
     }
     public override string[] ListNotificationInterests()
@@ -27,8 +31,7 @@ public class LoadingMediator : Mediator
         switch (notification.Name)
         {
             case PublicDefine.frameWorkMsg_LoadSceneProgress:
-                float _progress = (float)notification.Body;
-                txtProgress.text = (_progress * 100).ToString();
+                Update(notification.Body);
                 break;
             default:
                 break;
@@ -46,4 +49,8 @@ public class LoadingMediator : Mediator
         Debug.Log(NAME + ":ÒÆ³ý³É¹¦");
     }
 
+    public void Update(object data)
+    {
+        txtProgress.text = ((float)data * 100).ToString();
+    }
 }

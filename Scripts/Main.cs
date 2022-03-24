@@ -9,7 +9,7 @@ public class Main : MonoBehaviour
     {
 
         DontDestroyOnLoad(this);
-        new AppFacade();
+        new AppFacade(gameObject);
     }
 
     // Update is called once per frame

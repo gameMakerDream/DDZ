@@ -4,7 +4,8 @@ using UnityEngine;
 
 public interface IPanel
 {
+    GameObject animationRoot { get;}
+
     void Show(bool immediately=false);
     void Hide(bool immediately=false);
-    void Update(object data);
 }

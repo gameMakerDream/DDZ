@@ -26,6 +26,8 @@ public class OpenPanelCommand : SimpleCommand
                     Facade.RegisterMediator(_panel as WaitPanelMediator);
                     break;
                 case PanelType.SettingPanel:
+                    _panel = new SettingPanelMediator(_instance);
+                    Facade.RegisterMediator(_panel as SettingPanelMediator);
                     break;
                 default:
                     break;

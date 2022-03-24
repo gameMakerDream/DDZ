@@ -19,12 +19,12 @@ public class LoginMediator : Mediator
     private Toggle tgeAgreement;
     public LoginMediator(GameObject viewComponent) : base(NAME, viewComponent)
     {
-        ifAccount = Util.FindDeepChildAndGetComponent<InputField>(viewComponent.transform, "InputFieldAccount");
-        ifPassword = Util.FindDeepChildAndGetComponent<InputField>(viewComponent.transform, "InputFieldPassword");
-        btnLoginAccount = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "BtnLoginAccount");
-        btnLoginWechat = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "BtnLoginWechat");
-        btnLoginGuest = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "BtnLoginGuest");
-        tgeAgreement = Util.FindDeepChildAndGetComponent<Toggle>(viewComponent.transform, "TgeAgreement");
+        ifAccount = Util.FindDeepChildAndGetComponent<InputField>(viewComponent.transform, "ifAccount");
+        ifPassword = Util.FindDeepChildAndGetComponent<InputField>(viewComponent.transform, "ifPassword");
+        btnLoginAccount = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnLoginAccount");
+        btnLoginWechat = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnLoginWechat");
+        btnLoginGuest = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnLoginGuest");
+        tgeAgreement = Util.FindDeepChildAndGetComponent<Toggle>(viewComponent.transform, "tgeAgreement");
         btnLoginAccount.onClick.AddListener(OnClickLoginAccount);
         btnLoginWechat.onClick.AddListener(OnClickLoginWechat);
         btnLoginGuest.onClick.AddListener(OnClickLoginGuest);
@@ -51,11 +51,11 @@ public class LoginMediator : Mediator
     }
     private void OnClickLoginAccount()
     {
-        SendNotification(PublicDefine.frameWorkCmd_LoadScene, "Hall");
+        SendNotification(PublicDefine.frameWorkCmd_LoadScene, SceneName.Hall);
     }
     private void OnClickLoginWechat()
     {
-
+        SendNotification(PublicDefine.frameWorkCmd_LoadScene, SceneName.Hall);
     }
     private void OnClickLoginGuest()
     {

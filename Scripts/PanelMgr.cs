@@ -36,4 +36,8 @@ public class PanelMgr : MonoBehaviour
             return _panel;
         return null;
     }
+    public void Clear()
+    {
+        panelDic.Clear();
+    }
 }

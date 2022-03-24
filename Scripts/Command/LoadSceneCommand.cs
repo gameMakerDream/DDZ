@@ -8,16 +8,14 @@ public class LoadSceneCommand : SimpleCommand
 {
     public override void Execute(INotification notification)
     {
-        string _sceneName = (string) notification.Body;
+        SceneName _sceneName = (SceneName) notification.Body;
         switch (SceneMgr.instance.CurrentSceneName)
         {
-            case "Login":
+            case SceneName.Login:
                 break;
-            case "Hall":
+            case SceneName.Hall:
                 break;
-            case "DDZ":
-                break;
-            case "MJ":
+            case SceneName.Game:
                 break;
             default:
                 break;

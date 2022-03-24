@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 public class SceneMgr : MonoBehaviour
 {
     public static SceneMgr instance;
-    private string currentSceneName;
+    private SceneName currentSceneName;
 
-    public string CurrentSceneName
+    public SceneName CurrentSceneName
     {
         get { return currentSceneName; }
     }
@@ -18,16 +18,16 @@ public class SceneMgr : MonoBehaviour
         instance = this;
     }
 
-    public void LoadSceneAsync(string sceneName)
+    public void LoadSceneAsync(SceneName sceneName)
     {
         StartCoroutine("OnLoad",sceneName);
     }
 
-    private IEnumerator OnLoad(string sceneName)
+    private IEnumerator OnLoad(SceneName sceneName)
     {
         yield return SceneManager.LoadSceneAsync("Loading");
         AppFacade.GetInstance(() => new AppFacade()).RegisterMediator(new LoadingMediator(GameObject.Find("Canvas")));
-        AsyncOperation _ao = SceneManager.LoadSceneAsync(sceneName);
+        AsyncOperation _ao = SceneManager.LoadSceneAsync(sceneName.ToString());
         while (!_ao.isDone)
         {
             AppFacade.GetInstance(()=>new AppFacade()).SendNotification(PublicDefine.frameWorkMsg_LoadSceneProgress,_ao.progress);
@@ -38,7 +38,7 @@ public class SceneMgr : MonoBehaviour
 
 
 
-    private void OnComplete(string sceneName)
+    private void OnComplete(SceneName sceneName)
     {
         AppFacade.GetInstance(() => new AppFacade()).RemoveMediator(LoadingMediator.NAME);
         AppFacade.GetInstance(() => new AppFacade()).SendNotification(PublicDefine.frameWorkCmd_LoadSceneComplete,sceneName);

@@ -27,6 +27,7 @@ public class HallMediator : Mediator
         txtCoin = Util.FindDeepChildAndGetComponent<Text>(viewComponent.transform, "txtCoin");
         txtCurrency = Util.FindDeepChildAndGetComponent<Text>(viewComponent.transform, "txtCurrency");
         btnSetting = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnSetting");
+        btnShare = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnShare");
         btnDDZ = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnDDZ");
         btnMJ = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnDDZ");
         btnCreate = Util.FindDeepChildAndGetComponent<Button>(viewComponent.transform, "btnDDZ");
@@ -69,7 +70,7 @@ public class HallMediator : Mediator
     }
     private void OnClickSetting()
     {
-        
+        SendNotification(PublicDefine.frameWorkCmd_OpenPanel, PanelType.SettingPanel);
     }
     private void OnClickShare()
     {

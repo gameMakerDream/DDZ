@@ -5,14 +5,25 @@ using PureMVC.Patterns.Mediator;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaitPanelMediator : Mediator,IPanel
+public class WaitPanelMediator : Mediator,IPanel,IUpdater
 {
     public new const string NAME = "WaitPanelMediator";
 
-    private Text txtHint;
-    public WaitPanelMediator(GameObject viewComponent) : base(NAME, viewComponent)
+    public GameObject view
     {
-        txtHint = Util.FindDeepChildAndGetComponent<Text>(viewComponent.transform, "TxTHint");
+        get { return (GameObject)ViewComponent; }
+    }
+
+    public GameObject animationRoot
+    {
+        get { return view.transform.Find("BG").gameObject; }
+    }
+
+
+    private Text txtHint;
+    public WaitPanelMediator(object viewComponent) : base(NAME, viewComponent)
+    {
+        txtHint = Util.FindDeepChildAndGetComponent<Text>(view.transform, "TxTHint");
     }
 
     public override string[] ListNotificationInterests()
@@ -47,33 +58,19 @@ public class WaitPanelMediator : Mediator,IPanel
 
     public void Update(object data)
     {
-        string _text = (string)data;
+        string _text = data.ToString();
         txtHint.text = _text;
     }
 
 
 
-    public void Show(bool immediately=false)
+    public void Show(bool immediately=true)
     {
-        if (immediately)
-        {
-
-        }
-        else
-        {
-            
-        }
+        view.SetActive(true);
     }
 
-    public void Hide(bool immediately=false)
+    public void Hide(bool immediately= true)
     {
-        if (immediately)
-        {
-
-        }
-        else
-        {
-
-        }
+        view.SetActive(false);
     }
 }

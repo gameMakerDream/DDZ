@@ -8,21 +8,21 @@ public class LoadSceneCompleteCommand : SimpleCommand
 {
     public override void Execute(INotification notification)
     {
-        string _sceneName = (string) notification.Body;
+        SceneName _sceneName = (SceneName) notification.Body;
         GameObject _root = GameObject.Find("Canvas");
         switch (_sceneName)
         {
-            case "Login":
+            case SceneName.Login:
                 Facade.RegisterMediator(new LoginMediator(_root));
                 break;
-            case "Hall":
+            case SceneName.Hall:
+                Facade.RegisterMediator(new HallMediator(_root));
                 break;
-            case "DDZ":
-                break;
-            case "MJ":
+            case SceneName.Game:
                 break;
             default:
                 break;
         }
+        PanelMgr.instance.Clear();
     }
 }

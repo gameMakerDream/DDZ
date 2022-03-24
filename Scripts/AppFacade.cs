@@ -5,19 +5,14 @@ using UnityEngine;
 
 public class AppFacade : Facade
 {
-    public AppFacade() : base()
+    public AppFacade():base()
     {
-
+        
     }
-
-    protected override void InitializeFacade()
+    public AppFacade(GameObject gameManager) : this()
     {
-        base.InitializeFacade();
-        RegisterCommand(PublicDefine.frameWorkCmd_StartUp,()=>new StartUpCommand());
-        RegisterCommand(PublicDefine.frameWorkCmd_LoadScene, () => new LoadSceneCommand());
-        RegisterCommand(PublicDefine.frameWorkCmd_LoadSceneComplete, () => new LoadSceneCompleteCommand());
-        RegisterCommand(PublicDefine.frameWorkCmd_OpenPanel, () => new OpenPanelCommand());
-        SendNotification(PublicDefine.frameWorkCmd_StartUp);
+        RegisterCommand(PublicDefine.frameWorkCmd_StartUp, () => new StartUpCommand());
+        SendNotification(PublicDefine.frameWorkCmd_StartUp, gameManager);
         RemoveCommand(PublicDefine.frameWorkCmd_StartUp);
     }
 }

@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 209773775}
   - component: {fileID: 209773774}
   m_Layer: 5
-  m_Name: InputFieldPassword
+  m_Name: ifPassword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,7 +276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 213955265}
   m_Layer: 5
-  m_Name: Password
+  m_Name: password
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 334566942}
   - component: {fileID: 334566941}
   m_Layer: 5
-  m_Name: InputFieldAccount
+  m_Name: ifAccount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -537,7 +537,7 @@ GameObject:
   - component: {fileID: 448844426}
   - component: {fileID: 448844425}
   m_Layer: 5
-  m_Name: BtnLoginGuest
+  m_Name: btnLoginGuest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -740,7 +740,7 @@ GameObject:
   - component: {fileID: 699022254}
   - component: {fileID: 699022253}
   m_Layer: 5
-  m_Name: BtnLoginAccount
+  m_Name: btnLoginAccount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -942,7 +942,7 @@ GameObject:
   - component: {fileID: 911470142}
   - component: {fileID: 911470141}
   m_Layer: 5
-  m_Name: BtnLoginWechat
+  m_Name: btnLoginWechat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1227,7 +1227,7 @@ GameObject:
   - component: {fileID: 1352020475}
   - component: {fileID: 1352020474}
   m_Layer: 5
-  m_Name: BottomBar
+  m_Name: bottomBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1530,7 +1530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1703142095}
   m_Layer: 5
-  m_Name: Account
+  m_Name: account
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1725,7 +1725,7 @@ GameObject:
   - component: {fileID: 1928281284}
   - component: {fileID: 1928281285}
   m_Layer: 5
-  m_Name: TgeAgreement
+  m_Name: tgeAgreement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
