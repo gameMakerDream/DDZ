@@ -22,6 +22,7 @@ namespace DDZ
         private Clock clock;
         private PlayerHead[] playerHeadArray = new PlayerHead[3];
         private CPGroup[] cpGroupArray = new CPGroup[3];
+        private Transform[] clockPosArray = new Transform[3];
 
 
         public DDZMainMediator(object viewComponent) : base(NAME, viewComponent)
@@ -40,6 +41,10 @@ namespace DDZ
             {
                 cpGroupArray[i] = Util.FindDeepChildAndGetComponent<CPGroup>(view.transform, "playCardGroup" + i);
                 cpGroupArray[i].Initialize(i);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                clockPosArray[i] = Util.FindDeepChildAndGetComponent<Transform>(view.transform, "clockPos" + i);
             }
             tgeMenu.onValueChanged.AddListener(OnValueChangedMenu);
         }
