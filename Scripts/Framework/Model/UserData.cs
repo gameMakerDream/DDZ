@@ -9,4 +9,5 @@ public class UserData
     public int iconIndex;
     public float coin;
     public float currency;
+    public int sex;
 }

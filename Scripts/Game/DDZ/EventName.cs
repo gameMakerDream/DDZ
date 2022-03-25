@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DDZ
+public class EventName
 {
-    public class Constatnts
-    {
-        
-    }
+
+    public const string ServerMessage = "ServerMessage";
 }

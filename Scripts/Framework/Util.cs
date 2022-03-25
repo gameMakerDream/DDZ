@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Util
 {
-    public static Transform FindDeepChid(Transform parent,string childName)
+    public static Transform FindDeepChild(Transform parent,string childName)
     {
         Transform _child = parent.Find(childName);
         if (_child == null)
         {
             for (int i = 0; i < parent.childCount; i++)
             {
-                _child = FindDeepChid(parent.GetChild(i), childName);
+                _child = FindDeepChild(parent.GetChild(i), childName);
                 if (_child != null)
                     break;
             }
@@ -21,7 +21,7 @@ public class Util
 
     public static T FindDeepChildAndGetComponent<T>(Transform parent,string childName)where T:Component
     {
-        return FindDeepChid(parent, childName).GetComponent<T>();
+        return FindDeepChild(parent, childName).GetComponent<T>();
     }
 
     public static string Number2String(float number)

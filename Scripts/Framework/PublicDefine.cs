@@ -33,6 +33,7 @@ public enum ServerType
 public class PublicDefine : MonoBehaviour
 {
     public const string prefabPath = "prefab/";
+    public const string spritePath = "sprite/";
     public const string soundPath = "sound/";
 
     #region frameworkNotes
