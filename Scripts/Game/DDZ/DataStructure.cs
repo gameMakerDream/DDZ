@@ -70,7 +70,20 @@ namespace DDZ
         public PlayerData playerData;
         public int jbNumber;//0²»¼Ó±¶ 1¼Ó±¶ 
     }
-
+    public class PlayCardNotify
+    {
+        public PlayerData playerData;
+        public int time;
+    }
+    public class PlayCardResultNotify
+    {
+        public PlayerData playerData;
+        public List<CardData> cpList;
+    }
+    public class SettingNotify
+    {
+        
+    }
 
 
 
@@ -134,6 +147,7 @@ namespace DDZ
         public PlayerData bankerData;
         public List<CardData> dpCardList;
         public List<PlayerCallBankerData> playerCallBankerDataList;
-        public List<PlayerJiaBeiData> playerJiaBeiDtaList;
+        public List<PlayerJiaBeiData> playerJiaBeiDataList;
+        public List<CardData> lastPlayCardList;
     }
 }

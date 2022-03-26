@@ -85,10 +85,12 @@ namespace DDZ
         }
         public void OnDecodePlayCardNotify(object data)
         {
-
+         
         }
         public void OnDecodePlayCardResultNotify(object data)
         {
+            PlayCardResultNotify _pcrn = data as PlayCardResultNotify;
+            VO.lastPlayCardList = _pcrn.cpList;
 
         }
         public void OnDecodeSettleNotify(object data)
