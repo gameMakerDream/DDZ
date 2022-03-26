@@ -52,8 +52,8 @@ namespace DDZ
         public override string[] ListNotificationInterests()
         {
             List<string> _list = new List<string>();
-            _list.Add(EventName.RoundNotify);
-            _list.Add(EventName.StartMatchResponse);
+            _list.Add(EventName.GameStateNotify);
+            _list.Add(EventName.MatchResponse);
             _list.Add(EventName.PlayerEnterRoomNotif);
             _list.Add(EventName.PlayerExitRoomNotify);
             _list.Add(EventName.SendCardNotify);
@@ -72,13 +72,122 @@ namespace DDZ
         {
             switch (notification.Name)
             {
-
+                case "RoundNotify":
+                    OnHandleRoundNotify(notification.Body);
+                    break;
+                case "MatchResponse":
+                    OnHandleMatchResponse(notification.Body);
+                    break;
+                case "PlayerEnterRoomNotif":
+                    OnHandlePlayerEnterRoomNotify(notification.Body);
+                    break;
+                case "PlayerExitRoomNotify":
+                    OnHandlePlayerExitRoomNotify(notification.Body);
+                    break;
+                case "SendCardNotify":
+                    OnHandleSendCardNotify(notification.Body);
+                    break;
+                case "CallBankerNotify":
+                    OnHandleCallBankerNotify(notification.Body);
+                    break;
+                case "CallBankerResultNotify":
+                    OnHandleCallBankerResultNotify(notification.Body);
+                    break;
+                case "ShowBankerNotify":
+                    OnHandleShowBankerNotify(notification.Body);
+                    break;
+                case "JiaBeiNotify":
+                    OnHandleJiaBeiNotify(notification.Body);
+                    break;
+                case "JiaBeiResultNotify":
+                    OnHandleJiaBeiResultNotify(notification.Body);
+                    break;
+                case "PlayCardNotify":
+                    OnHandlePlayCardNotify(notification.Body);
+                    break;
+                case "PlayCardResultNotify":
+                    OnHandlePlayCardResultNotify(notification.Body);
+                    break;
+                case "SettleNotify":
+                    OnHandleSettleNotify(notification.Body);
+                    break;
+                default: 
+                    break;
+            }
+            Debug.Log(NAME + ":收到" + notification.Name + "消息");
+        }
+        private void OnHandleRoundNotify(object data)
+        {
+            object[] _args = (object[])data;
+            GameState _gameState = (GameState)_args[0];
+            switch (_gameState)
+            {
+                case GameState.Match:
+                    break;
+                case GameState.SendCard:
+                    break;
+                case GameState.CallBanker:
+                    break;
+                case GameState.ShowBanker:
+                    break;
+                case GameState.JiaBei:
+                    break;
+                case GameState.PlayCard:
+                    break;
+                case GameState.Settle:
+                    break;
                 default:
                     break;
             }
-            base.HandleNotification(notification);
         }
+        private void OnHandleMatchResponse(object data)
+        {
+            //开始匹配
+        }
+        private void OnHandlePlayerEnterRoomNotify(object data)
+        {
 
+        }
+        private void OnHandlePlayerExitRoomNotify(object data)
+        {
+
+        }
+        private void OnHandleSendCardNotify(object data)
+        {
+
+        }
+        private void OnHandleCallBankerNotify(object data)
+        {
+
+        }
+        private void OnHandleCallBankerResultNotify(object data)
+        {
+
+        }
+        private void OnHandleShowBankerNotify(object data)
+        {
+
+        }
+        private void OnHandleJiaBeiNotify(object data)
+        {
+
+        }
+        private void OnHandleJiaBeiResultNotify(object data)
+        {
+
+        }
+        private void OnHandlePlayCardNotify(object data)
+        {
+
+        }
+        private void OnHandlePlayCardResultNotify(object data)
+        {
+
+        }
+        private void OnHandleSettleNotify(object data)
+        {
+
+        }
         public override void OnRegister()
         {
             base.OnRegister();

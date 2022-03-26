@@ -7,11 +7,11 @@ public class EventName
     public const string ServerMessage = "ServerMessage";
 
     //1匹配环节   2发牌环节 3叫地主环节 4地主展示环节  5加倍环节 6出牌环节 7结算环节
-    public const string RoundNotify = "RoundNotify";
+    public const string GameStateNotify = "GameStateNotify";
 
     //public const string MatchRoundNotify = "MatchRoundNotify";
-    public const string StartMatchRequest = "StartMatchRequest";
-    public const string StartMatchResponse = "StartMatchResponse";
+    public const string MatchRequest = "MatchRequest";
+    public const string MatchResponse = "MatchResponse";
 
     public const string PlayerEnterRoomNotif = "PlayerEnterRoomNotif";
     public const string PlayerExitRoomNotify = "PlayerExitRoomNotify";

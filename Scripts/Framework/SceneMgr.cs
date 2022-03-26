@@ -26,11 +26,11 @@ public class SceneMgr : MonoBehaviour
     private IEnumerator OnLoad(SceneName sceneName)
     {
         yield return SceneManager.LoadSceneAsync("Loading");
-        AppFacade.GetInstance(() => new AppFacade()).RegisterMediator(new LoadingMediator(GameObject.Find("Canvas")));
+        AppFacade.Instance.RegisterMediator(new LoadingMediator(GameObject.Find("Canvas")));
         AsyncOperation _ao = SceneManager.LoadSceneAsync(sceneName.ToString());
         while (!_ao.isDone)
         {
-            AppFacade.GetInstance(() => new AppFacade()).SendNotification(PublicDefine.frameWorkMsg_LoadSceneProgress, _ao.progress);
+            AppFacade.Instance.SendNotification(PublicDefine.frameWorkMsg_LoadSceneProgress, _ao.progress);
             yield return new WaitForEndOfFrame();
         }
         OnComplete(sceneName);
@@ -40,8 +40,8 @@ public class SceneMgr : MonoBehaviour
 
     private void OnComplete(SceneName sceneName)
     {
-        AppFacade.GetInstance(() => new AppFacade()).RemoveMediator(LoadingMediator.NAME);
-        AppFacade.GetInstance(() => new AppFacade()).SendNotification(PublicDefine.frameWorkCmd_LoadSceneComplete, sceneName);
+        AppFacade.Instance.RemoveMediator(LoadingMediator.NAME);
+        AppFacade.Instance.SendNotification(PublicDefine.frameWorkCmd_LoadSceneComplete, sceneName);
         currentSceneName = sceneName;
     }
 }

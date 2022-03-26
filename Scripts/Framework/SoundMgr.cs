@@ -86,7 +86,7 @@ public class SoundMgr : MonoBehaviour
 
     private void LoadConfing()
     {
-        ClientDataProxy _cdp = AppFacade.GetInstance(() => new AppFacade()).RetrieveProxy(ClientDataProxy.NAME) as ClientDataProxy;
+        ClientDataProxy _cdp = AppFacade.Instance.RetrieveProxy(ClientDataProxy.NAME) as ClientDataProxy;
         SetBackVolume((float)_cdp.VO.backSoundVolume);
         SetEffectVolume((float)_cdp.VO.effectSoundVolume);
     }

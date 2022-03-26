@@ -8,7 +8,7 @@ public class Main : MonoBehaviour
     {
 
         DontDestroyOnLoad(this);
-        new AppFacade(gameObject);
+        AppFacade.Instance.StartUp();
     }
 
     // Update is called once per frame

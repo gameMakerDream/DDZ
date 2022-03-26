@@ -7,8 +7,8 @@ public class StartUpCommand : SimpleCommand
 {
     public override void Execute(INotification notification)
     {
+        GameObject _gameManager = GameObject.Find("GameManager");
         Facade.RegisterProxy(new ClientDataProxy());
-        GameObject _gameManager = (GameObject)notification.Body;
         _gameManager.AddComponent<SceneMgr>();
         _gameManager.AddComponent<PanelMgr>();
         _gameManager.AddComponent<SoundMgr>();
