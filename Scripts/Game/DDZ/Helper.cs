@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,19 @@ public class Helper : MonoBehaviour
     {
         
     }
-    public void Set(string[] leftCardArray)
+    public void Show(string[] leftCardArray)
+    {
+        gameObject.SetActive(true);
+        transform.DOScaleX(1, 0.5f);
+    }
+    public void Hide()
+    {
+        transform.DOScaleX(0, 0.5f).OnComplete(() => 
+        {
+            gameObject.SetActive(false);
+        });
+    }
+    private void Set(string[] leftCardArray)
     {
         int[] _valueArray = Translate(leftCardArray);
         int _index = 3;

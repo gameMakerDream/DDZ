@@ -4,6 +4,16 @@ using UnityEngine;
 
 namespace DDZ
 {
+    public enum GameState
+    {
+        Match,
+        SendCard,
+        CallBanker,
+        ShowBanker,
+        JiaBei,
+        PlayCard,
+        Settle
+    }
     public class ServerMessage
     {
         public string name;
@@ -20,6 +30,7 @@ namespace DDZ
         public int color;
         public int number;
         public string name;
+        public bool selete;
     }
     public class PlayerData
     {
@@ -28,10 +39,17 @@ namespace DDZ
         public float coin;
         public int sex;
         public int iconIndex;
-        public List<CardData> cardList;
+    }
+    public class PlayerCardData
+    {
+        public List<CardData> spCardList;
+        public List<CardData> selectCardList;
     }
     public class DDZMainData
     {
         public RoomData roomData;
+        public PlayerData[] playerDataArray;
+        public PlayerCardData[] playerCardDataArray;
+        public GameState gameState;
     }
 }

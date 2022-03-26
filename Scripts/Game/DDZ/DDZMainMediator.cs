@@ -51,12 +51,31 @@ namespace DDZ
 
         public override string[] ListNotificationInterests()
         {
-
-            return base.ListNotificationInterests();
+            List<string> _list = new List<string>();
+            _list.Add(EventName.RoundNotify);
+            _list.Add(EventName.StartMatchResponse);
+            _list.Add(EventName.PlayerEnterRoomNotif);
+            _list.Add(EventName.PlayerExitRoomNotify);
+            _list.Add(EventName.SendCardNotify);
+            _list.Add(EventName.CallBankerNotify);
+            _list.Add(EventName.CallBankerResultNotify);
+            _list.Add(EventName.ShowBankerNotify);
+            _list.Add(EventName.JiaBeiNotify);
+            _list.Add(EventName.JiaBeiResultNotify);
+            _list.Add(EventName.PlayCardNotify);
+            _list.Add(EventName.PlayCardResultNotify);
+            _list.Add(EventName.SettleNotify);
+            return _list.ToArray();
         }
 
         public override void HandleNotification(INotification notification)
         {
+            switch (notification.Name)
+            {
+
+                default:
+                    break;
+            }
             base.HandleNotification(notification);
         }
 
