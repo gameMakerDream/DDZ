@@ -7,12 +7,11 @@ namespace DDZ
 
     public class Constants
     {
-        public const float spCardInterval = 50;
-        public const float cpCardInterval = 40;
-        public const float mpCardInterval = 30;
-        public const float spCardWidth = 149;
+        public static float[] spCardInterval = new float[]{50,25,25};
+        public static float[] spCardWidth = new float[] { 149, 100, 100 };
+        public static float cpCardInterval = 40;
         public const float cpCardWidth = 100;
-        public const float mpCardWidth = 50;
+        
 
 
     }

@@ -114,16 +114,16 @@ namespace DDZ
     {
         public string color;
         public int number;
-        public string name;
+        public string name { get; private set; }
         public CardData()
         {
             
         }
-        public CardData(string color, int number, string name)
+        public CardData(string color, int number)
         {
             this.color = color;
             this.number = number;
-            this.name = name;
+            this.name =color+ number.ToString("D2");
         }
     }
     public class PlayerData//和服务器通用
@@ -138,11 +138,9 @@ namespace DDZ
     public class PlayerCardData
     {
         public List<CardData> spCardList;
-        public List<CardData> selectCardList;
         public PlayerCardData()
         {
             spCardList = new List<CardData>();
-            selectCardList = new List<CardData>();
         }
     }
     public class PlayerJiaBeiData:JiaBeiResultNotify

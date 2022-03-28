@@ -8,9 +8,10 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerEnterHandler,IPoin
 {
     private Image imgIcon;
     // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
-        imgIcon = Util.FindDeepChildAndGetComponent<Image>(transform,"BG");
+        imgIcon = Util.FindDeepChildAndGetComponent<Image>(transform, "BG");
     }
 
     // Update is called once per frame
@@ -19,11 +20,18 @@ public class Card : MonoBehaviour,IPointerDownHandler,IPointerEnterHandler,IPoin
         
     }
 
-    public void Show(string iconName)
+    public void SetIcon(string iconName)
     {
-        imgIcon.sprite=Resources.Load<Sprite>(PublicDefine.spritePath+"ddz/"+ iconName);
-        name= iconName;
+        string path = PublicDefine.spritePath + "ddz/" + iconName;
+        imgIcon.sprite=Resources.Load<Sprite>(path);
+    }
+    public void Show()
+    {
         gameObject.SetActive(true);
+    }
+    public void Hide()
+    {
+        gameObject.SetActive(false);
     }
     public void ChangeAnchors(Vector2 vector)
     {

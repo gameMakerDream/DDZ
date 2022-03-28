@@ -18,7 +18,7 @@ namespace DDZ
 
         private GameObject menu;
         private Toggle tgeMenu;
-        private SPGroup spGroup;
+        private SPGroup[] spGroupArray;
         private Clock clock;
         private PlayerHead[] playerHeadArray = new PlayerHead[3];
         private CPGroup[] cpGroupArray = new CPGroup[3];
@@ -29,8 +29,12 @@ namespace DDZ
         {
             menu = Util.FindDeepChild(view.transform, "menu").gameObject;
             tgeMenu = Util.FindDeepChildAndGetComponent<Toggle>(view.transform, "tgeMenu");
-            spGroup = Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "handCardGroup");
             clock = Util.FindDeepChildAndGetComponent<Clock>(view.transform, "timer");
+            for (int i = 0; i < 3; i++)
+            {
+                spGroupArray[i] =Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "SPGroup"+i);
+                spGroupArray[i].Initialize(i);
+            }
             for (int i = 0; i < 3; i++)
             {
                 playerHeadArray[i] = Util.FindDeepChildAndGetComponent<PlayerHead>(view.transform, "playerHead" + i);
@@ -171,8 +175,12 @@ namespace DDZ
         }
         private void OnHandleSendCardNotify(object[] data)
         {
-            var _spList = (List<CardData>)data[0];
+            var _playerCardDataList = (List<PlayerCardData>)data[0];
             var _dpList = (List<CardData>)data[1];
+            for (int i = 0; i < _playerCardDataList.Count; i++)
+            {
+                spGroupArray[i].ShowSP(_playerCardDataList[i].spCardList);
+            }
         }
         private void OnHandleCallBankerNotify(object[] data)
         {

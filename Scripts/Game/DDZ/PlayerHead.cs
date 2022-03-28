@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace DDZ
 {
-    public class PlayerHead : MonoBehaviour
+    public class PlayerHead : MonoBehaviour,IIndexer
     {
         private Image imgIcon;
         private Image imgTG;
@@ -18,7 +18,12 @@ namespace DDZ
         private Text txtSPLeft;
         private Text txtSRight;
 
-        private int seatIndex;
+        public int seatIndex 
+        {
+            get;
+            set;
+        }
+
         public void Initialize(int seatIndex)
         {
             this.seatIndex = seatIndex;
