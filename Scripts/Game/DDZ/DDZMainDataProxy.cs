@@ -8,7 +8,7 @@ namespace DDZ
     public class DDZMainDataProxy : Proxy
     {
         public new const string NAME = "DDZMainDataProxy";
-
+        private UserDataProxy userDataProxy;
         public DDZMainData VO
         {
             get { return (DDZMainData)Data; }
@@ -20,6 +20,7 @@ namespace DDZ
 
         public override void OnRegister()
         {
+            userDataProxy = Facade.RetrieveProxy(userDataProxy.ProxyName) as UserDataProxy;
             base.OnRegister();
         }
 
@@ -29,73 +30,113 @@ namespace DDZ
         }
 
 
-        public void OnDecodeGameStateNotify(object data)
+        public object[] OnSetGameStateNotify(GameStateNotify data)
         {
-            GameStateNotify _gsn = data as GameStateNotify;
-            VO.gameState = _gsn.gameState;
+            VO.gameState = data.gameState;
+            return new object[] { VO.gameState };
         }
-        public void OnDecodeMatchResponse(object data)
+        public object[] OnSetMatchResponse(MatchResponse data)
         {
+            return new object[0];
+        }
+        public object[] OnSetMatchResultNotify(MatchResultNotify data)
+        {
+            int _index = 0;
+            int _count = 0;
+            List<PlayerData> _temp = new List<PlayerData>();
+            while (_count < 3)
+            {
+                PlayerData _pd = data.playerDataList[_index];
+                if (_pd.userId == userDataProxy.VO.userId || _temp[0] != null)
+                {
+                    _temp.Add(_pd);
+                    _count++;
+                }
+                _index = (_index + 1) % data.playerDataList.Count;
+            }
+            VO.playerDataList = _temp;
+            return new object[] { VO.playerDataList };
+        }
+        public object[] OnSetPlayerEnterRoomNotify(PlayerEnterRoomNotify data)
+        {
+            //PlayerData _pd = data.player;
+            //VO.playerDataList.Add(_pd);
+            //return new object[] { _pd };
+            //暂时放弃 不一定用不用
+            return new object[0];
+        }
 
-        }
-        public void OnDecodePlayerEnterRoomNotify(object data)
+        public object[] OnSetPlayerExitRoomNotify(PlayerExitRoomNotify data)
         {
-            PlayerEnterRoomNotify _pern = data as PlayerEnterRoomNotify;
-            PlayerData _pd = _pern.player;
-            VO.playerDataList.Add(_pd);
+            PlayerData _pd = data.player;
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(_pd.serverSeatIndex);
+            VO.playerCardDataList.RemoveAt(_clientSeatIndex);
+            return new object[] { _clientSeatIndex };
         }
-        public void OnDecodePlayerExitRoomNotify(object data)
+        public object[] OnSetSendCardNotify(SendCardNotify data)
         {
-            PlayerExitRoomNotify _pern = data as PlayerExitRoomNotify;
-            PlayerData _pd = _pern.player;
-            VO.playerDataList[_pd.seatIndex] = null;
-        }
-        public void OnDecodeSendCardNotify(object data)
-        {
-            SendCardNotify _scn=data as SendCardNotify;
-            for (int i = 0; i < _scn.spCardListArray.Length; i++)
+            for (int i = 0; i < data.spCardListArray.Count; i++)
             {
                 VO.playerCardDataList[i] = new PlayerCardData();
-                VO.playerCardDataList[i].spCardList = _scn.spCardListArray[i];
+                int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(i);
+                VO.playerCardDataList[i].spCardList = data.spCardListArray[_clientSeatIndex];
             }
-            VO.dpCardList = _scn.dpCardList;
+            VO.dpCardList = data.dpCardList;
+            return new object[] { VO.playerCardDataList, VO.dpCardList };
         }
-        public void OnDecodeCallBankerNotify(object data)
+        public object[] OnSetCallBankerNotify(CallBankerNotify data)
         {
-            //不需要处理 直接转发
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            return new object[] { _clientSeatIndex, data.time };
         }
-        public void OnDecodeCallBankerResultNotify(object data)
+        public object[] OnSetCallBankerResultNotify(CallBankerResultNotify data)
         {
-            CallBankerResultNotify _cbrn =data as CallBankerResultNotify;
-            VO.playerCallBankerDataList.Add(_cbrn as PlayerCallBankerData);
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            return new object[] { _clientSeatIndex, data.callType };
         }
-        public void OnDecodeShowBankerNotify(object data)
+        public object[] OnSetShowBankerNotify(ShowBankerNotify data)
         {
-            ShowBankerNotify _sbn=data as ShowBankerNotify;
-            VO.bankerData = _sbn.playerData;
+            VO.bankerData = data.playerData;
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(VO.bankerData.serverSeatIndex);
+            return new object[] { _clientSeatIndex, VO.dpCardList };
         }
-        public void OnDecodeJiaBeiNotify(object data)
+        public object[] OnSetJiaBeiNotify(JiaBeiNotify data)
         {
-            //
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            return new object[] { _clientSeatIndex, data.time };
         }
-        public void OnDecodeJiaBeiResultNotify(object data)
+        public object[] OnSetJiaBeiResultNotify(JiaBeiResultNotify data)
         {
-            JiaBeiResultNotify _jbrn =data as JiaBeiResultNotify;
-            VO.playerJiaBeiDataList.Add(_jbrn as PlayerJiaBeiData);
+            VO.playerJiaBeiDataList.Add(data as PlayerJiaBeiData);
+            return new object[] { data.playerData.serverSeatIndex, data.jbNumber };
         }
-        public void OnDecodePlayCardNotify(object data)
+        public object[] OnSetPlayCardNotify(PlayCardNotify data)
         {
-         
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            return new object[] { _clientSeatIndex, data.time };
         }
-        public void OnDecodePlayCardResultNotify(object data)
+        public object[] OnSetPlayCardResultNotify(PlayCardResultNotify data)
         {
-            PlayCardResultNotify _pcrn = data as PlayCardResultNotify;
-            VO.lastPlayCardList = _pcrn.cpList;
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            VO.lastCpCardData.clientSeat = _clientSeatIndex;
+            VO.lastCpCardData.cpList = data.cpList;
+            return new object[] { VO.lastCpCardData.clientSeat, VO.lastCpCardData.cpList };
+        }
+        public object[] OnSetGameSettleNotify(GameSettleNotify data)
+        {
+            return new object[0];
+        }
 
-        }
-        public void OnDecodeSettleNotify(object data)
-        {
 
+
+        private int GetPlayerClientSeatIndexByServerSeat(int serverSeatIndex)
+        {
+            for (int i = 0; i < VO.playerDataList.Count; i++)
+            {
+                if (serverSeatIndex == VO.playerDataList[i].serverSeatIndex)
+                    return i;
+            }
+            return -1;
         }
     }
 }

@@ -70,60 +70,65 @@ namespace DDZ
 
         public override void HandleNotification(INotification notification)
         {
+            object[] _args = (object[])notification.Body;
             switch (notification.Name)
             {
-                case "RoundNotify":
-                    OnHandleRoundNotify(notification.Body);
+                case "GameStateNotify":
+                    OnHandleGameStateNotify(_args);
                     break;
                 case "MatchResponse":
-                    OnHandleMatchResponse(notification.Body);
+                    OnHandleMatchResponse(_args);
+                    break;
+                case "MatchResultNotify":
+                    OnHandleMatchResponse(_args);
                     break;
                 case "PlayerEnterRoomNotif":
-                    OnHandlePlayerEnterRoomNotify(notification.Body);
+                    OnHandlePlayerEnterRoomNotify(_args);
                     break;
                 case "PlayerExitRoomNotify":
-                    OnHandlePlayerExitRoomNotify(notification.Body);
+                    OnHandlePlayerExitRoomNotify(_args);
                     break;
                 case "SendCardNotify":
-                    OnHandleSendCardNotify(notification.Body);
+                    OnHandleSendCardNotify(_args);
                     break;
                 case "CallBankerNotify":
-                    OnHandleCallBankerNotify(notification.Body);
+                    OnHandleCallBankerNotify(_args);
                     break;
                 case "CallBankerResultNotify":
-                    OnHandleCallBankerResultNotify(notification.Body);
+                    OnHandleCallBankerResultNotify(_args);
                     break;
                 case "ShowBankerNotify":
-                    OnHandleShowBankerNotify(notification.Body);
+                    OnHandleShowBankerNotify(_args);
                     break;
                 case "JiaBeiNotify":
-                    OnHandleJiaBeiNotify(notification.Body);
+                    OnHandleJiaBeiNotify(_args);
                     break;
                 case "JiaBeiResultNotify":
-                    OnHandleJiaBeiResultNotify(notification.Body);
+                    OnHandleJiaBeiResultNotify(_args);
                     break;
                 case "PlayCardNotify":
-                    OnHandlePlayCardNotify(notification.Body);
+                    OnHandlePlayCardNotify(_args);
                     break;
                 case "PlayCardResultNotify":
-                    OnHandlePlayCardResultNotify(notification.Body);
+                    OnHandlePlayCardResultNotify(_args);
                     break;
-                case "SettleNotify":
-                    OnHandleSettleNotify(notification.Body);
+                case "GameSettleNotify":
+                    OnHandleGameSettleNotify(_args);
                     break;
                 default: 
                     break;
             }
             Debug.Log(NAME + ":收到" + notification.Name + "消息");
         }
-        private void OnHandleRoundNotify(object data)
+        private void OnHandleGameStateNotify(object[] data)
         {
-            object[] _args = (object[])data;
-            GameState _gameState = (GameState)_args[0];
+            GameState _gameState = (GameState)data[0];
             switch (_gameState)
             {
-                case GameState.Match:
+                case GameState.Idle:
                     break;
+                //case GameState.Match:
+                //    break;
                 case GameState.SendCard:
                     break;
                 case GameState.CallBanker:
@@ -140,51 +145,64 @@ namespace DDZ
                     break;
             }
         }
-        private void OnHandleMatchResponse(object data)
+        private void OnHandleMatchResponse(object[] data)
         {
             //开始匹配
+
         }
-        private void OnHandlePlayerEnterRoomNotify(object data)
+        private void OnHandleMatchResultNotify(object[] data)
+        {
+            List<PlayerData> _list = data[0] as List<PlayerData>;
+            for (int i = 0; i < _list.Count; i++)
+            {
+                PlayerData _pd = _list[i];
+                playerHeadArray[i].SitDown(_pd);
+            }
+        }
+        private void OnHandlePlayerEnterRoomNotify(object[] data)
+        {
+            //PlayerData _pd = data[0] as PlayerData;
+            //暂时放弃 不一定用不用
+        }
+        private void OnHandlePlayerExitRoomNotify(object[] data)
+        {
+            int _seatIndex = (int)data[0];
+            playerHeadArray[_seatIndex].SitUp();
+        }
+        private void OnHandleSendCardNotify(object[] data)
+        {
+            var _spList = (List<CardData>)data[0];
+            var _dpList = (List<CardData>)data[1];
+        }
+        private void OnHandleCallBankerNotify(object[] data)
         {
 
         }
-        private void OnHandlePlayerExitRoomNotify(object data)
+        private void OnHandleCallBankerResultNotify(object[] data)
         {
 
         }
-        private void OnHandleSendCardNotify(object data)
+        private void OnHandleShowBankerNotify(object[] data)
         {
 
         }
-        private void OnHandleCallBankerNotify(object data)
+        private void OnHandleJiaBeiNotify(object[] data)
         {
 
         }
-        private void OnHandleCallBankerResultNotify(object data)
+        private void OnHandleJiaBeiResultNotify(object[] data)
         {
 
         }
-        private void OnHandleShowBankerNotify(object data)
+        private void OnHandlePlayCardNotify(object[] data)
         {
 
         }
-        private void OnHandleJiaBeiNotify(object data)
+        private void OnHandlePlayCardResultNotify(object[] data)
         {
 
         }
-        private void OnHandleJiaBeiResultNotify(object data)
-        {
-
-        }
-        private void OnHandlePlayCardNotify(object data)
-        {
-
-        }
-        private void OnHandlePlayCardResultNotify(object data)
-        {
-
-        }
-        private void OnHandleSettleNotify(object data)
+        private void OnHandleGameSettleNotify(object[] data)
         {
 
         }

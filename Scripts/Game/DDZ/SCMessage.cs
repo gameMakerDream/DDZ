@@ -19,7 +19,7 @@ namespace DDZ
         private DDZMainDataProxy ddzProxy;
         public void Initialize()
         {
-            ddzProxy=AppFacade.Instance.RetrieveProxy(DDZMainDataProxy.NAME) as DDZMainDataProxy;
+            ddzProxy = AppFacade.Instance.RetrieveProxy(DDZMainDataProxy.NAME) as DDZMainDataProxy;
         }
 
         private void Decode(ServerMessage msg)
@@ -27,11 +27,14 @@ namespace DDZ
             object[] _args;
             switch (msg.name)
             {
-                case "RoundNotify":
-                    _args=OnDecodeRoundNotify(msg.body);
+                case "GameStateNotify":
+                    _args = OnDecodeGameStateNotify(msg.body);
                     break;
                 case "MatchResponse":
                     _args = OnDecodeMatchResponse(msg.body);
+                    break;
+                case "MatchResultNotify":
+                    _args = OnDecodeMatchResultNotify(msg.body);
                     break;
                 case "PlayerEnterRoomNotif":
                     _args = OnDecodePlayerEnterRoomNotify(msg.body);
@@ -63,80 +66,97 @@ namespace DDZ
                 case "PlayCardResultNotify":
                     _args = OnDecodePlayCardResultNotify(msg.body);
                     break;
-                case "SettleNotify":
-                    _args = OnDecodeSettleNotify(msg.body);
+                case "GameSettleNotify":
+                    _args = OnDecodeGameSettleNotify(msg.body);
                     break;
                 default:
-                    _args =null;
+                    _args = null;
                     break;
             }
             QueueMessage _qm = new QueueMessage(msg.name, _args);
             EventQueue.Instance.Add(_qm);
         }
 
-        private object[] OnDecodeRoundNotify(object data)
+        private object[] OnDecodeGameStateNotify(object data)
         {
             GameStateNotify _gsn = data as GameStateNotify;
-            return null;
+            return ddzProxy.OnSetGameStateNotify(_gsn);
         }
         private object[] OnDecodeMatchResponse(object data)
         {
-            return null;
+            MatchResponse _mr = data as MatchResponse;
+            return ddzProxy.OnSetMatchResponse(_mr);
+
+        }
+        private object[] OnDecodeMatchResultNotify(object data)
+        {
+            MatchResultNotify _mrn = data as MatchResultNotify;
+            return ddzProxy.OnSetMatchResultNotify(_mrn);
 
         }
         private object[] OnDecodePlayerEnterRoomNotify(object data)
         {
-            return null;
+            PlayerEnterRoomNotify _pern = data as PlayerEnterRoomNotify;
+            return ddzProxy.OnSetPlayerEnterRoomNotify(_pern);
 
         }
         private object[] OnDecodePlayerExitRoomNotify(object data)
         {
-            return null;
+            PlayerExitRoomNotify _pern = data as PlayerExitRoomNotify;
+            return ddzProxy.OnSetPlayerExitRoomNotify(_pern);
 
         }
         private object[] OnDecodeSendCardNotify(object data)
         {
-            return null;
+            SendCardNotify _scn = data as SendCardNotify;
+            return ddzProxy.OnSetSendCardNotify(_scn);
 
         }
         private object[] OnDecodeCallBankerNotify(object data)
         {
-            return null;
+            CallBankerNotify _cbn = data as CallBankerNotify;
+            return ddzProxy.OnSetCallBankerNotify(_cbn);
 
         }
         private object[] OnDecodeCallBankerResultNotify(object data)
         {
-            return null;
+            CallBankerResultNotify _cbrn = data as CallBankerResultNotify;
+            return ddzProxy.OnSetCallBankerResultNotify(_cbrn);
 
         }
         private object[] OnDecodeShowBankerNotify(object data)
         {
-
-            return null;
+            ShowBankerNotify _sbn = data as ShowBankerNotify;
+            return ddzProxy.OnSetShowBankerNotify(_sbn);
         }
         private object[] OnDecodeJiaBeiNotify(object data)
         {
-            return null;
+            JiaBeiNotify _jbn = data as JiaBeiNotify;
+            return ddzProxy.OnSetJiaBeiNotify(_jbn);
 
         }
         private object[] OnDecodeJiaBeiResultNotify(object data)
         {
-            return null;
+            JiaBeiResultNotify _jbrn = data as JiaBeiResultNotify;
+            return ddzProxy.OnSetJiaBeiResultNotify(_jbrn);
 
         }
         private object[] OnDecodePlayCardNotify(object data)
         {
-            return null;
+            PlayCardNotify _pcn = data as PlayCardNotify;
+            return ddzProxy.OnSetPlayCardNotify(_pcn);
 
         }
         private object[] OnDecodePlayCardResultNotify(object data)
         {
-            return null;
+            PlayCardResultNotify _pcrn = data as PlayCardResultNotify;
+            return ddzProxy.OnSetPlayCardResultNotify(_pcrn);
 
         }
-        private object[] OnDecodeSettleNotify(object data)
+        private object[] OnDecodeGameSettleNotify(object data)
         {
-            return null;
+            GameSettleNotify _sn = data as GameSettleNotify;
+            return ddzProxy.OnSetGameSettleNotify(_sn);
 
         }
         public void Clear()

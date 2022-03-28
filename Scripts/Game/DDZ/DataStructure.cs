@@ -6,6 +6,7 @@ namespace DDZ
 {
     public enum GameState
     {
+        Idle,
         Match,
         SendCard,
         CallBanker,
@@ -33,6 +34,10 @@ namespace DDZ
     {
         
     }
+    public class MatchResultNotify
+    {
+        public List<PlayerData> playerDataList;
+    }
     public class PlayerEnterRoomNotify
     {
         public PlayerData player;
@@ -43,7 +48,7 @@ namespace DDZ
     }
     public class SendCardNotify
     {
-        public List<CardData>[] spCardListArray;
+        public List<List<CardData>> spCardListArray;
         public List<CardData> dpCardList;
     }
     public class CallBankerNotify
@@ -64,6 +69,7 @@ namespace DDZ
     public class JiaBeiNotify
     {
         public PlayerData playerData;
+        public int time;
     }
     public class JiaBeiResultNotify
     {
@@ -80,7 +86,7 @@ namespace DDZ
         public PlayerData playerData;
         public List<CardData> cpList;
     }
-    public class SettingNotify
+    public class GameSettleNotify
     {
         
     }
@@ -104,21 +110,30 @@ namespace DDZ
         public string roomId;
         public string roomName;
     }
-    public class CardData
+    public class CardData//和服务器通用
     {
-        public int color;
+        public string color;
         public int number;
         public string name;
-        public bool selete;
+        public CardData()
+        {
+            
+        }
+        public CardData(string color, int number, string name)
+        {
+            this.color = color;
+            this.number = number;
+            this.name = name;
+        }
     }
-    public class PlayerData
+    public class PlayerData//和服务器通用
     {
         public string userId;
         public string nickName;
         public float coin;
         public int sex;
         public int iconIndex;
-        public int seatIndex;
+        public int serverSeatIndex;
     }
     public class PlayerCardData
     {
@@ -130,13 +145,14 @@ namespace DDZ
             selectCardList = new List<CardData>();
         }
     }
-    public class PlayerCallBankerData:CallBankerResultNotify
-    {
-     
-    }
     public class PlayerJiaBeiData:JiaBeiResultNotify
     {
         
+    }
+    public class LastPlayCardData
+    {
+        public int clientSeat;
+        public List<CardData> cpList;
     }
     public class DDZMainData
     {
@@ -146,8 +162,7 @@ namespace DDZ
         public GameState gameState;
         public PlayerData bankerData;
         public List<CardData> dpCardList;
-        public List<PlayerCallBankerData> playerCallBankerDataList;
         public List<PlayerJiaBeiData> playerJiaBeiDataList;
-        public List<CardData> lastPlayCardList;
+        public LastPlayCardData lastCpCardData;
     }
 }
