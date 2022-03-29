@@ -88,7 +88,7 @@ namespace DDZ
         public object[] OnSetCallBankerNotify(CallBankerNotify data)
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
-            return new object[] { _clientSeatIndex, data.time };
+            return new object[] { _clientSeatIndex, data.time,VO.callBankerMaxScore };
         }
         public object[] OnSetCallBankerResultNotify(CallBankerResultNotify data)
         {
@@ -112,7 +112,6 @@ namespace DDZ
         public object[] OnSetJiaBeiResultNotify(JiaBeiResultNotify data)
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
-            
             return new object[] { _clientSeatIndex, data.jbNumber };
         }
         public object[] OnSetPlayCardNotify(PlayCardNotify data)

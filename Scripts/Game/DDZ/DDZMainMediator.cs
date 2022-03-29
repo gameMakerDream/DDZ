@@ -255,7 +255,7 @@ namespace DDZ
             clock.StopClock();
             if (_seatIndex == 0)
                 ctpCallBanker.SetActive(false);
-            chatArray[_seatIndex].ShowChat(_callScore.ToString());
+            chatArray[_seatIndex].ShowChat(_callScore.ToString()+"f");
         }
         private void OnHandleShowBankerNotify(object[] data)
         {
