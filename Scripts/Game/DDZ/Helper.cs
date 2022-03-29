@@ -30,7 +30,7 @@ public class Helper : MonoBehaviour
             gameObject.SetActive(false);
         });
     }
-    private void Set(string[] leftCardArray)
+    public void Set(string[] leftCardArray)
     {
         int[] _valueArray = Translate(leftCardArray);
         int _index = 3;

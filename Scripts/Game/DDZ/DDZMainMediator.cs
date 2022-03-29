@@ -23,16 +23,35 @@ namespace DDZ
         private PlayerHead[] playerHeadArray = new PlayerHead[3];
         private CPGroup[] cpGroupArray = new CPGroup[3];
         private Transform[] clockPosArray = new Transform[3];
-
-
+        private GameObject ctpCallBanker;
+        private GameObject ctpPlayCard;
+        private GameObject ctpJiaBei;
+        private Button[] btnCallBankerArray;
+        private Button btnPlayCard;
+        private Button btnHint;
+        private Button btnPass;
+        private Button btnJB;
+        private Button btnCJJB;
+        private Button btnBJB;
+        private Chat[] chatArray = new Chat[3];
         public DDZMainMediator(object viewComponent) : base(NAME, viewComponent)
         {
             menu = Util.FindDeepChild(view.transform, "menu").gameObject;
             tgeMenu = Util.FindDeepChildAndGetComponent<Toggle>(view.transform, "tgeMenu");
             clock = Util.FindDeepChildAndGetComponent<Clock>(view.transform, "timer");
+            ctpCallBanker = Util.FindDeepChild(view.transform, "ctpCallBanker").gameObject;
+            ctpPlayCard = Util.FindDeepChild(view.transform, "ctpPlayCard").gameObject;
+            ctpJiaBei = Util.FindDeepChild(view.transform, "ctpJiaBei").gameObject;
+            btnPlayCard = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnPlayCard");
+            btnHint = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnHint");
+            btnPass = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnPass");
+            btnJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnJB");
+            btnCJJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnCJJB");
+            btnBJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnBJB");
+
             for (int i = 0; i < 3; i++)
             {
-                spGroupArray[i] =Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "SPGroup"+i);
+                spGroupArray[i] = Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "SPGroup" + i);
                 spGroupArray[i].Initialize(i);
             }
             for (int i = 0; i < 3; i++)
@@ -50,7 +69,28 @@ namespace DDZ
             {
                 clockPosArray[i] = Util.FindDeepChildAndGetComponent<Transform>(view.transform, "clockPos" + i);
             }
+            for (int i = 0; i < 4; i++)
+            {
+                int callScore = i;
+                btnCallBankerArray[i] = Util.FindDeepChildAndGetComponent<Button>(view.transform, i.ToString());
+                btnCallBankerArray[i].onClick.AddListener(delegate
+                {
+                    OnClickCallBanker(callScore);
+                });
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                chatArray[i] = Util.FindDeepChildAndGetComponent<Chat>(view.transform, "Chat" + i);
+                chatArray[i].Initialize(i);
+
+            }
             tgeMenu.onValueChanged.AddListener(OnValueChangedMenu);
+            btnPlayCard.onClick.AddListener(OnClickPlayCard);
+            btnHint.onClick.AddListener(OnClickHint);
+            btnPass.onClick.AddListener(OnClickPass);
+            btnJB.onClick.AddListener(OnClickJB);
+            btnCJJB.onClick.AddListener(OnClickCJJB);
+            btnBJB.onClick.AddListener(OnClickBJB);
         }
 
         public override string[] ListNotificationInterests()
@@ -69,6 +109,7 @@ namespace DDZ
             _list.Add(EventName.PlayCardNotify);
             _list.Add(EventName.PlayCardResultNotify);
             _list.Add(EventName.SettleNotify);
+            _list.Add(EventName.GeSendCardComplete);
             return _list.ToArray();
         }
 
@@ -119,7 +160,10 @@ namespace DDZ
                 case "GameSettleNotify":
                     OnHandleGameSettleNotify(_args);
                     break;
-                default: 
+                case EventName.GeSendCardComplete:
+                    OnHandleSendCardCompleteCallBack();
+                    break;
+                default:
                     break;
             }
             Debug.Log(NAME + ":收到" + notification.Name + "消息");
@@ -176,27 +220,49 @@ namespace DDZ
         private void OnHandleSendCardNotify(object[] data)
         {
             var _playerCardDataList = (List<PlayerCardData>)data[0];
-            var _dpList = (List<CardData>)data[1];
             for (int i = 0; i < _playerCardDataList.Count; i++)
             {
-                spGroupArray[i].ShowSP(_playerCardDataList[i].spCardList);
+                spGroupArray[i].ShowSP(_playerCardDataList[i].spCardList, i != 0);
             }
+        }
+        /// <summary>
+        /// 做底牌动画 此时不需要知道底牌
+        /// </summary>
+        private void OnHandleSendCardCompleteCallBack()
+        {
         }
         private void OnHandleCallBankerNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            float _time = (float)data[1];
+            clock.SetClock(clockPosArray[_seatIndex].position, _time);
+            if (_seatIndex == 0)
+                ctpCallBanker.SetActive(true);
         }
         private void OnHandleCallBankerResultNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            int _callScore = (int)data[1];
+            clock.StopClock();
+            if (_seatIndex == 0)
+                ctpCallBanker.SetActive(false);
+            chatArray[_seatIndex].ShowChat(_callScore.ToString());
         }
         private void OnHandleShowBankerNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            List<CardData> _dpList = (List<CardData>)data[1];
+            List<CardData> _spList = (List<CardData>)data[2];
+            if (_seatIndex == 0)
+                spGroupArray[_seatIndex].BeBanker(_spList, _dpList);
+            playerHeadArray[_seatIndex].SetSPLeft(_spList.Count);
         }
         private void OnHandleJiaBeiNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            float _time = (float)data[1];
+            clock.SetClock(clockPosArray[_seatIndex].position, _time);
+            if (_seatIndex == 0)
         }
         private void OnHandleJiaBeiResultNotify(object[] data)
         {
@@ -229,7 +295,34 @@ namespace DDZ
         {
             menu.SetActive(value);
         }
+        private void OnClickCallBanker(int callScore)
+        {
 
+        }
+        private void OnClickPlayCard()
+        {
+
+        }
+        private void OnClickHint()
+        {
+
+        }
+        private void OnClickPass()
+        {
+
+        }
+        private void OnClickJB()
+        {
+            
+        }
+        private void OnClickCJJB()
+        {
+
+        }
+        private void OnClickBJB()
+        {
+
+        }
     }
 
 }

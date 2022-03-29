@@ -18,10 +18,11 @@ public class Clock : MonoBehaviour
     }
     public void SetClock(Vector3 position,float time)
     {
+        StopClock();
         transform.position = position;
         StartCoroutine("StartClock", time);
     }
-    public void StopClick()
+    public void StopClock()
     {
         StopCoroutine("StartClock");
     }

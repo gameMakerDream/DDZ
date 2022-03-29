@@ -40,4 +40,8 @@ public class EventName
     //public const string SettleRoundNotify = "SettleRoundNotify";
     public const string SettleNotify = "SettleNotify";
 
+
+
+
+    public const string GeSendCardComplete = "GeSendCardComplete";//游戏时间 发牌动画结束
 }

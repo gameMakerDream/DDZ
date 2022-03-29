@@ -15,7 +15,7 @@ namespace DDZ
             List<CardData> temp = new List<CardData>();
             for (int i = 0; i < 17; i++)
             {
-                CardData data = new CardData("1",Random.Range(5,14));
+                CardData data = new CardData("1", Random.Range(5, 14));
                 temp.Add(data);
             }
             s.ShowSP(temp);
@@ -26,5 +26,6 @@ namespace DDZ
         {
 
         }
+
     }
 }

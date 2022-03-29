@@ -25,7 +25,7 @@ namespace DDZ
                 _card.SetIcon(path + cpList[i].name);
                 _card.Show();
             }
-            SortPosition();
+            SortPosition(cpList.Count);
         }
         public void HideCP()
         {

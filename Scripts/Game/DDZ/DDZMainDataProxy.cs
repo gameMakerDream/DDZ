@@ -33,6 +33,7 @@ namespace DDZ
         public object[] OnSetGameStateNotify(GameStateNotify data)
         {
             VO.gameState = data.gameState;
+            Constants.gameState = data.gameState;
             return new object[] { VO.gameState };
         }
         public object[] OnSetMatchResponse(MatchResponse data)
@@ -82,7 +83,7 @@ namespace DDZ
                 VO.playerCardDataList[i].spCardList = data.spCardListArray[_clientSeatIndex];
             }
             VO.dpCardList = data.dpCardList;
-            return new object[] { VO.playerCardDataList, VO.dpCardList };
+            return new object[] { VO.playerCardDataList };
         }
         public object[] OnSetCallBankerNotify(CallBankerNotify data)
         {
@@ -92,13 +93,14 @@ namespace DDZ
         public object[] OnSetCallBankerResultNotify(CallBankerResultNotify data)
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
-            return new object[] { _clientSeatIndex, data.callType };
+            return new object[] { _clientSeatIndex, data.callScore };
         }
         public object[] OnSetShowBankerNotify(ShowBankerNotify data)
         {
             VO.bankerData = data.playerData;
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(VO.bankerData.serverSeatIndex);
-            return new object[] { _clientSeatIndex, VO.dpCardList };
+            VO.playerCardDataList[_clientSeatIndex].spCardList.AddRange(VO.dpCardList);
+            return new object[] { _clientSeatIndex, VO.dpCardList, VO.playerCardDataList[_clientSeatIndex].spCardList };
         }
         public object[] OnSetJiaBeiNotify(JiaBeiNotify data)
         {

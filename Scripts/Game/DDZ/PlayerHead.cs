@@ -16,7 +16,7 @@ namespace DDZ
         private GameObject spLeft;
         private GameObject spRight;
         private Text txtSPLeft;
-        private Text txtSRight;
+        private Text txtSPRight;
 
         public int seatIndex 
         {
@@ -43,7 +43,7 @@ namespace DDZ
             txtName = Util.FindDeepChildAndGetComponent<Text>(transform, "txtName");
             txtCoin = Util.FindDeepChildAndGetComponent<Text>(transform, "txtCoin");
             txtSPLeft = Util.FindDeepChildAndGetComponent<Text>(transform, "txtSPLeft");
-            txtSRight = Util.FindDeepChildAndGetComponent<Text>(transform, "txtSRight");
+            txtSPRight = Util.FindDeepChildAndGetComponent<Text>(transform, "txtSRight");
             spLeft = Util.FindDeepChild(transform, "spLeft").gameObject;
             spRight = Util.FindDeepChild(transform, "spRight").gameObject;
         }
@@ -74,6 +74,11 @@ namespace DDZ
                 spLeft.SetActive(true);
             else if (seatIndex == 2)
                 spRight.SetActive(true);
+        }
+        public void SetSPLeft(int count)
+        {
+            txtSPLeft.text = count.ToString();
+            txtSPRight.text = count.ToString();
         }
 
     }
