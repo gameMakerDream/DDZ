@@ -112,6 +112,7 @@ namespace DDZ
     }
     public class CardData//和服务器通用
     {
+
         public string color;
         public int number;
         public string name { get; private set; }
@@ -158,9 +159,9 @@ namespace DDZ
         public List<PlayerData> playerDataList;
         public List<PlayerCardData> playerCardDataList;
         public GameState gameState;
+        public int callBankerMaxScore;
         public PlayerData bankerData;
         public List<CardData> dpCardList;
-        public List<PlayerJiaBeiData> playerJiaBeiDataList;
         public LastPlayCardData lastCpCardData;
     }
 }

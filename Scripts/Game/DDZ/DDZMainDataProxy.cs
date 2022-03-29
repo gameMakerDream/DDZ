@@ -93,6 +93,8 @@ namespace DDZ
         public object[] OnSetCallBankerResultNotify(CallBankerResultNotify data)
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            if (data.callScore > VO.callBankerMaxScore)
+                VO.callBankerMaxScore = data.callScore;
             return new object[] { _clientSeatIndex, data.callScore };
         }
         public object[] OnSetShowBankerNotify(ShowBankerNotify data)
@@ -109,8 +111,9 @@ namespace DDZ
         }
         public object[] OnSetJiaBeiResultNotify(JiaBeiResultNotify data)
         {
-            VO.playerJiaBeiDataList.Add(data as PlayerJiaBeiData);
-            return new object[] { data.playerData.serverSeatIndex, data.jbNumber };
+            int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
+            
+            return new object[] { _clientSeatIndex, data.jbNumber };
         }
         public object[] OnSetPlayCardNotify(PlayCardNotify data)
         {

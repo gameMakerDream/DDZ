@@ -15,7 +15,7 @@ public class Chat : MonoBehaviour, IIndexer
 
     public void ShowChat(string iconName)
     {
-        icon.sprite = Resources.Load<Sprite>(PublicDefine.spritePath+"ddz/chat/"+iconName+"f");
+        icon.sprite = Resources.Load<Sprite>(PublicDefine.spritePath+"ddz/chat/"+iconName);
         gameObject.SetActive(true);
     }
     public void HideChat()

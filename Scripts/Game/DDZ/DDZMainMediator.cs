@@ -26,7 +26,7 @@ namespace DDZ
         private GameObject ctpCallBanker;
         private GameObject ctpPlayCard;
         private GameObject ctpJiaBei;
-        private Button[] btnCallBankerArray;
+        private Button[] callBankerBtnArray;
         private Button btnPlayCard;
         private Button btnHint;
         private Button btnPass;
@@ -72,8 +72,8 @@ namespace DDZ
             for (int i = 0; i < 4; i++)
             {
                 int callScore = i;
-                btnCallBankerArray[i] = Util.FindDeepChildAndGetComponent<Button>(view.transform, i.ToString());
-                btnCallBankerArray[i].onClick.AddListener(delegate
+                callBankerBtnArray[i] = Util.FindDeepChildAndGetComponent<Button>(view.transform, i.ToString());
+                callBankerBtnArray[i].onClick.AddListener(delegate
                 {
                     OnClickCallBanker(callScore);
                 });
@@ -235,9 +235,18 @@ namespace DDZ
         {
             int _seatIndex = (int)data[0];
             float _time = (float)data[1];
+            int _maxScore = (int)data[2];
             clock.SetClock(clockPosArray[_seatIndex].position, _time);
             if (_seatIndex == 0)
+            {
                 ctpCallBanker.SetActive(true);
+                EnableCallBankerBtn(_maxScore);
+            }
+        }
+        private void EnableCallBankerBtn(int score)
+        {
+            for (int i = 1; i <= score; i++)
+                callBankerBtnArray[i].enabled = false;
         }
         private void OnHandleCallBankerResultNotify(object[] data)
         {
@@ -263,10 +272,16 @@ namespace DDZ
             float _time = (float)data[1];
             clock.SetClock(clockPosArray[_seatIndex].position, _time);
             if (_seatIndex == 0)
+                ctpJiaBei.SetActive(true);
         }
         private void OnHandleJiaBeiResultNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            int _jbNumber = (int)data[1];
+            clock.StopClock();
+            if (_seatIndex == 0)
+                ctpJiaBei.SetActive(true);
+            chatArray[_seatIndex].ShowChat(_jbNumber.ToString()+"b");
         }
         private void OnHandlePlayCardNotify(object[] data)
         {
