@@ -7,7 +7,7 @@ public class Clock : MonoBehaviour
 {
     private Text txtTime;
     // Start is called before the first frame update
-    void Start()
+    public void Initialize()
     {
         txtTime = Util.FindDeepChildAndGetComponent<Text>(transform, "Text");
     }
@@ -20,11 +20,13 @@ public class Clock : MonoBehaviour
     {
         StopClock();
         transform.position = position;
+        gameObject.SetActive(true);
         StartCoroutine("StartClock", time);
     }
     public void StopClock()
     {
         StopCoroutine("StartClock");
+        gameObject.SetActive(false);
     }
     private IEnumerator StartClock(float time)
     {

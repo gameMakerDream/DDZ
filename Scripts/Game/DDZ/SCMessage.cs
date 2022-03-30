@@ -22,51 +22,51 @@ namespace DDZ
             ddzProxy = AppFacade.Instance.RetrieveProxy(DDZMainDataProxy.NAME) as DDZMainDataProxy;
         }
 
-        private void Decode(ServerMessage msg)
+        public void Decode(ServerMessage msg)
         {
             object[] _args;
             switch (msg.name)
             {
-                case "GameStateNotify":
+                case EventName.GameStateNotify:
                     _args = OnDecodeGameStateNotify(msg.body);
                     break;
-                case "MatchResponse":
+                case EventName.MatchResponse:
                     _args = OnDecodeMatchResponse(msg.body);
                     break;
-                case "MatchResultNotify":
+                case EventName.MatchResultNotify:
                     _args = OnDecodeMatchResultNotify(msg.body);
                     break;
-                case "PlayerEnterRoomNotif":
+                case EventName.PlayerEnterRoomNotify:
                     _args = OnDecodePlayerEnterRoomNotify(msg.body);
                     break;
-                case "PlayerExitRoomNotify":
+                case EventName.PlayerExitRoomNotify:
                     _args = OnDecodePlayerExitRoomNotify(msg.body);
                     break;
-                case "SendCardNotify":
+                case EventName.SendCardNotify:
                     _args = OnDecodeSendCardNotify(msg.body);
                     break;
-                case "CallBankerNotify":
+                case EventName.CallBankerNotify:
                     _args = OnDecodeCallBankerNotify(msg.body);
                     break;
-                case "CallBankerResultNotify":
+                case EventName.CallBankerResultNotify:
                     _args = OnDecodeCallBankerResultNotify(msg.body);
                     break;
-                case "ShowBankerNotify":
+                case EventName.ShowBankerNotify:
                     _args = OnDecodeShowBankerNotify(msg.body);
                     break;
-                case "JiaBeiNotify":
+                case EventName.JiaBeiNotify:
                     _args = OnDecodeJiaBeiNotify(msg.body);
                     break;
-                case "JiaBeiResultNotify":
+                case EventName.JiaBeiResultNotify:
                     _args = OnDecodeJiaBeiResultNotify(msg.body);
                     break;
-                case "PlayCardNotify":
+                case EventName.PlayCardNotify:
                     _args = OnDecodePlayCardNotify(msg.body);
                     break;
-                case "PlayCardResultNotify":
+                case EventName.PlayCardResultNotify:
                     _args = OnDecodePlayCardResultNotify(msg.body);
                     break;
-                case "GameSettleNotify":
+                case EventName.SettleNotify:
                     _args = OnDecodeGameSettleNotify(msg.body);
                     break;
                 default:
@@ -106,10 +106,10 @@ namespace DDZ
             return ddzProxy.OnSetPlayerExitRoomNotify(_pern);
 
         }
-        private object[] OnDecodeSendCardNotify(object data)
+        private object[] OnDecodeSendCardNotify(object data,bool immediately=false)
         {
             SendCardNotify _scn = data as SendCardNotify;
-            return ddzProxy.OnSetSendCardNotify(_scn);
+            return ddzProxy.OnSetSendCardNotify(_scn, immediately);
 
         }
         private object[] OnDecodeCallBankerNotify(object data)

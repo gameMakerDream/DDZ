@@ -969,7 +969,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6190448976994029872}
   m_Layer: 5
-  m_Name: Helper
+  m_Name: helper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

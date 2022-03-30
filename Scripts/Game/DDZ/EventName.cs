@@ -12,8 +12,9 @@ public class EventName
     //public const string MatchRoundNotify = "MatchRoundNotify";
     public const string MatchRequest = "MatchRequest";
     public const string MatchResponse = "MatchResponse";
+    public const string MatchResultNotify = "MatchResultNotify";
 
-    public const string PlayerEnterRoomNotif = "PlayerEnterRoomNotif";
+    public const string PlayerEnterRoomNotify = "PlayerEnterRoomNotif";
     public const string PlayerExitRoomNotify = "PlayerExitRoomNotify";
 
     //public const string SendCardRoundNotify = "SendCardRoundNotify";
@@ -39,9 +40,10 @@ public class EventName
 
     //public const string SettleRoundNotify = "SettleRoundNotify";
     public const string SettleNotify = "SettleNotify";
+    public const string BSChangeNotify = "BSChangeNotify";
 
 
 
-
-    public const string GeSendCardComplete = "GeSendCardComplete";//游戏时间 发牌动画结束
+    public const string GeShowCardUpdate = "GeShowCardUpdate";//游戏事件 不断更新牌的张数
+    public const string GeShowCardComplete = "GeShowCardComplete";//游戏时间 发牌动画结束
 }

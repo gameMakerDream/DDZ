@@ -18,6 +18,7 @@ public class AppFacade : Facade
     }
     public void StartUp()
     {
+
         RegisterCommand(PublicDefine.frameWorkCmd_StartUp, () => new StartUpCommand());
         SendNotification(PublicDefine.frameWorkCmd_StartUp);
         RemoveCommand(PublicDefine.frameWorkCmd_StartUp);

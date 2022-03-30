@@ -12,14 +12,14 @@ namespace DDZ
         // Start is called before the first frame update
         public RectTransform rectTransform;
         private Tween tween;
+        [HideInInspector]
         public bool select;
-        void Awake()
+        public virtual void Initialize()
         {
             imgIcon = Util.FindDeepChildAndGetComponent<Image>(transform, "BG");
             rectTransform = GetComponent<RectTransform>();
             select = false;
         }
-
         // Update is called once per frame
         void Update()
         {

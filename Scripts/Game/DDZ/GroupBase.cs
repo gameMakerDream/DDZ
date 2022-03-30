@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DDZ
 {
@@ -22,29 +23,41 @@ namespace DDZ
         public virtual void Initialize(int seatIndex)
         {
             this.seatIndex = seatIndex;
+            InitCard();
         }
         protected void SortPosition(int count)
         {
             int _count = count;
             float _x = 0;
             float _y = 0;
+            float _interval = Constants.spCardInterval[seatIndex];
+            if (seatIndex == 1)
+                _interval = -_interval;
             if (seatIndex == 0)
             {
-                float _totalCardWidth = (_count - 1) * Constants.spCardInterval[seatIndex] + Constants.spCardWidth[seatIndex];
+                float _totalCardWidth = (_count - 1) * _interval + Constants.spCardWidth[seatIndex];
                 float _groupWidth = GetComponent<RectTransform>().rect.width;
-                _x = (_groupWidth - _totalCardWidth) / 2+Constants.spCardWidth[seatIndex]/2;
-                _y = -Constants.spCardHeight[seatIndex]/2;
+                _x = (_groupWidth - _totalCardWidth) / 2 + Constants.spCardWidth[seatIndex] / 2;
+                _y = -Constants.spCardHeight[seatIndex] / 2;
             }
             for (int i = 0; i < _count; i++)
             {
-                if (i >= 10 && seatIndex != 0)
+                if (i == 10 && seatIndex != 0)
                 {
-                    _y = 40;
+                    _y = -40;
                     _x = 0;
                 }
-                RectTransform _child = transform.GetChild(i).GetComponent<RectTransform>();
+                RectTransform _child = transform.GetChild(GetRealIndexByLogicIndex(i)).GetComponent<RectTransform>();
                 _child.anchoredPosition = new Vector2(_x, _y);
-                _x += Constants.spCardInterval[seatIndex];
+                _x += _interval;
+            }
+        }
+        protected void InitCard()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                _card.Initialize();
             }
         }
         protected void SetCard(List<CardData> cardList)
@@ -52,7 +65,7 @@ namespace DDZ
             HideAll();
             for (int i = 0; i < cardList.Count; i++)
             {
-                Card _card = transform.GetChild(i).GetComponent<Card>();
+                Card _card = transform.GetChild(GetRealIndexByLogicIndex(i)).GetComponent<Card>();
                 _card.name = cardList[i].name;
                 _card.SetIcon(path + cardList[i].name);
             }
@@ -69,11 +82,11 @@ namespace DDZ
         {
             for (int i = 0; i < count; i++)
             {
-                Card _card = transform.GetChild(i).GetComponent<Card>();
+                Card _card = transform.GetChild(GetRealIndexByLogicIndex(i)).GetComponent<Card>();
                 _card.Show();
             }
         }
-        protected void SortNumber(int count)
+        protected void SortNumberUp(int count)
         {
             for (int i = 0; i < count - 1; i++)
             {
@@ -81,14 +94,44 @@ namespace DDZ
                 {
                     Transform _child1=transform.GetChild(j);
                     Transform _child2 = transform.GetChild(j + 1);
-                    if (int.Parse(_child1.name) < int.Parse(_child2.name))
+                    if (int.Parse(_child1.name.Substring(1,2)) < int.Parse(_child2.name.Substring(1, 2)))
                     {
-                        _child1.SetSiblingIndex(j + 1);
+                        Sprite _tempSprite = _child1.Find("BG").GetComponent<Image>().sprite;
+                        string _tempName = _child1.name;
+                        _child1.Find("BG").GetComponent<Image>().sprite = _child2.Find("BG").GetComponent<Image>().sprite;
+                        _child2.Find("BG").GetComponent<Image>().sprite = _tempSprite;
+                        _child1.name = _child2.name;
+                        _child2.name = _tempName;
+
                     }
                 }
             }
         }
+        protected int GetRealIndexByLogicIndex(int index)
+        {
+            return Constants.seatChildIndexArrayArray[seatIndex][index];
+        }
+        //protected void SortNumberDown(int count)
+        //{
+        //    for (int i = 0; i < count - 1; i++)
+        //    {
+        //        for (int j = 0; j < count - i - 1; j++)
+        //        {
+        //            Transform _child1 = transform.GetChild(j);
+        //            Transform _child2 = transform.GetChild(j + 1);
+        //            if (int.Parse(_child1.name.Substring(1, 2)) > int.Parse(_child2.name.Substring(1, 2)))
+        //            {
+        //                Sprite _tempSprite = _child1.Find("BG").GetComponent<Image>().sprite;
+        //                string _tempName = _child1.name;
+        //                _child1.Find("BG").GetComponent<Image>().sprite = _child2.Find("BG").GetComponent<Image>().sprite;
+        //                _child2.Find("BG").GetComponent<Image>().sprite = _tempSprite;
+        //                _child1.name = _child2.name;
+        //                _child2.name = _tempName;
 
+        //            }
+        //        }
+        //    }
+        //}
         //protected Card GetCard()
         //{
         //    GameObject _prefab = Resources.Load<GameObject>(PublicDefine.prefabPath + path);

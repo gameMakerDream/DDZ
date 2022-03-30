@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityTimer;
 using DDZ;
+using UnityEngine;
+
 public class QueueMessage
 {
     public string name;
@@ -26,8 +28,8 @@ public class EventQueue
 
     private Timer timer;
     private Queue<QueueMessage> eventQueue;
-    private bool @lock;
-    public void Initialize()
+    private  static bool @lock;
+    public EventQueue()
     {
         @lock = false;
         eventQueue = new Queue<QueueMessage>();
@@ -39,9 +41,9 @@ public class EventQueue
     {
         if (eventQueue.Count != 0 && !@lock)
         {
-            QueueMessage _qm=eventQueue.Dequeue();
-            AppFacade.Instance.SendNotification(_qm.name, _qm.args);
             @lock = true;
+            QueueMessage _qm =eventQueue.Dequeue();
+            AppFacade.Instance.SendNotification(_qm.name, _qm.args);
         }
     }
 
@@ -50,7 +52,7 @@ public class EventQueue
         eventQueue.Enqueue(qm);
     }
 
-    public void UnLock()
+    public static void UnLock()
     {
         @lock=false;
     }

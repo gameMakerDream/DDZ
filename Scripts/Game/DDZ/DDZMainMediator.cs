@@ -4,6 +4,7 @@ using UnityEngine;
 using PureMVC.Patterns.Mediator;
 using UnityEngine.UI;
 using PureMVC.Interfaces;
+using System;
 
 namespace DDZ
 {
@@ -18,27 +19,30 @@ namespace DDZ
 
         private GameObject menu;
         private Toggle tgeMenu;
-        private SPGroup[] spGroupArray;
+        private SPGroup[] spGroupArray = new SPGroup[3];
         private Clock clock;
+        private Helper helper;
         private PlayerHead[] playerHeadArray = new PlayerHead[3];
         private CPGroup[] cpGroupArray = new CPGroup[3];
         private Transform[] clockPosArray = new Transform[3];
         private GameObject ctpCallBanker;
         private GameObject ctpPlayCard;
         private GameObject ctpJiaBei;
-        private Button[] callBankerBtnArray;
+        private Button[] callBankerBtnArray = new Button[4];
         private Button btnPlayCard;
         private Button btnHint;
         private Button btnPass;
         private Button btnJB;
         private Button btnCJJB;
         private Button btnBJB;
+        private Button btnHelper;
         private Chat[] chatArray = new Chat[3];
         public DDZMainMediator(object viewComponent) : base(NAME, viewComponent)
         {
             menu = Util.FindDeepChild(view.transform, "menu").gameObject;
             tgeMenu = Util.FindDeepChildAndGetComponent<Toggle>(view.transform, "tgeMenu");
-            clock = Util.FindDeepChildAndGetComponent<Clock>(view.transform, "timer");
+            clock = Util.FindDeepChildAndGetComponent<Clock>(view.transform, "clock");
+            helper = Util.FindDeepChildAndGetComponent<Helper>(view.transform, "helper");
             ctpCallBanker = Util.FindDeepChild(view.transform, "ctpCallBanker").gameObject;
             ctpPlayCard = Util.FindDeepChild(view.transform, "ctpPlayCard").gameObject;
             ctpJiaBei = Util.FindDeepChild(view.transform, "ctpJiaBei").gameObject;
@@ -48,10 +52,11 @@ namespace DDZ
             btnJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnJB");
             btnCJJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnCJJB");
             btnBJB = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnBJB");
+            btnHelper = Util.FindDeepChildAndGetComponent<Button>(view.transform, "btnHelper");
 
             for (int i = 0; i < 3; i++)
             {
-                spGroupArray[i] = Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "SPGroup" + i);
+                spGroupArray[i] = Util.FindDeepChildAndGetComponent<SPGroup>(view.transform, "spGroup" + i);
                 spGroupArray[i].Initialize(i);
             }
             for (int i = 0; i < 3; i++)
@@ -62,7 +67,7 @@ namespace DDZ
             }
             for (int i = 0; i < 3; i++)
             {
-                cpGroupArray[i] = Util.FindDeepChildAndGetComponent<CPGroup>(view.transform, "playCardGroup" + i);
+                cpGroupArray[i] = Util.FindDeepChildAndGetComponent<CPGroup>(view.transform, "cpGroup" + i);
                 cpGroupArray[i].Initialize(i);
             }
             for (int i = 0; i < 3; i++)
@@ -80,10 +85,13 @@ namespace DDZ
             }
             for (int i = 0; i < 3; i++)
             {
-                chatArray[i] = Util.FindDeepChildAndGetComponent<Chat>(view.transform, "Chat" + i);
+                chatArray[i] = Util.FindDeepChildAndGetComponent<Chat>(view.transform, "chat" + i);
                 chatArray[i].Initialize(i);
 
             }
+            clock.Initialize();
+            helper.Initialize();
+
             tgeMenu.onValueChanged.AddListener(OnValueChangedMenu);
             btnPlayCard.onClick.AddListener(OnClickPlayCard);
             btnHint.onClick.AddListener(OnClickHint);
@@ -91,6 +99,7 @@ namespace DDZ
             btnJB.onClick.AddListener(OnClickJB);
             btnCJJB.onClick.AddListener(OnClickCJJB);
             btnBJB.onClick.AddListener(OnClickBJB);
+            btnHelper.onClick.AddListener(OnClickHelper);
         }
 
         public override string[] ListNotificationInterests()
@@ -98,7 +107,8 @@ namespace DDZ
             List<string> _list = new List<string>();
             _list.Add(EventName.GameStateNotify);
             _list.Add(EventName.MatchResponse);
-            _list.Add(EventName.PlayerEnterRoomNotif);
+            _list.Add(EventName.MatchResultNotify);
+            _list.Add(EventName.PlayerEnterRoomNotify);
             _list.Add(EventName.PlayerExitRoomNotify);
             _list.Add(EventName.SendCardNotify);
             _list.Add(EventName.CallBankerNotify);
@@ -109,7 +119,8 @@ namespace DDZ
             _list.Add(EventName.PlayCardNotify);
             _list.Add(EventName.PlayCardResultNotify);
             _list.Add(EventName.SettleNotify);
-            _list.Add(EventName.GeSendCardComplete);
+            _list.Add(EventName.GeShowCardUpdate);
+            _list.Add(EventName.GeShowCardComplete);
             return _list.ToArray();
         }
 
@@ -118,56 +129,65 @@ namespace DDZ
             object[] _args = (object[])notification.Body;
             switch (notification.Name)
             {
-                case "GameStateNotify":
+                case EventName.GameStateNotify:
                     OnHandleGameStateNotify(_args);
                     break;
-                case "MatchResponse":
+                case EventName.MatchResponse:
                     OnHandleMatchResponse(_args);
                     break;
-                case "MatchResultNotify":
-                    OnHandleMatchResponse(_args);
+                case EventName.MatchResultNotify:
+                    OnHandleMatchResultNotify(_args);
                     break;
-                case "PlayerEnterRoomNotif":
+                case EventName.PlayerEnterRoomNotify:
                     OnHandlePlayerEnterRoomNotify(_args);
                     break;
-                case "PlayerExitRoomNotify":
+                case EventName.PlayerExitRoomNotify:
                     OnHandlePlayerExitRoomNotify(_args);
                     break;
-                case "SendCardNotify":
+                case EventName.SendCardNotify:
                     OnHandleSendCardNotify(_args);
                     break;
-                case "CallBankerNotify":
+                case EventName.CallBankerNotify:
                     OnHandleCallBankerNotify(_args);
                     break;
-                case "CallBankerResultNotify":
+                case EventName.CallBankerResultNotify:
                     OnHandleCallBankerResultNotify(_args);
                     break;
-                case "ShowBankerNotify":
+                case EventName.ShowBankerNotify:
                     OnHandleShowBankerNotify(_args);
                     break;
-                case "JiaBeiNotify":
+                case EventName.JiaBeiNotify:
                     OnHandleJiaBeiNotify(_args);
                     break;
-                case "JiaBeiResultNotify":
+                case EventName.JiaBeiResultNotify:
                     OnHandleJiaBeiResultNotify(_args);
                     break;
-                case "PlayCardNotify":
+                case EventName.PlayCardNotify:
                     OnHandlePlayCardNotify(_args);
                     break;
-                case "PlayCardResultNotify":
+                case EventName.PlayCardResultNotify:
                     OnHandlePlayCardResultNotify(_args);
                     break;
-                case "GameSettleNotify":
+                case EventName.SettleNotify:
                     OnHandleGameSettleNotify(_args);
                     break;
-                case EventName.GeSendCardComplete:
-                    OnHandleSendCardCompleteCallBack();
+                case EventName.GeShowCardUpdate:
+                    OnHandleShowCardUpdate(_args);
+                    break;
+                case EventName.GeShowCardComplete:
+                    OnHandleShowCardComplete(_args);
+                    break;
+                case EventName.BSChangeNotify:
+                    OnHandleBSChangeNotify(_args);
                     break;
                 default:
                     break;
             }
             Debug.Log(NAME + ":收到" + notification.Name + "消息");
         }
+
+
+
         private void OnHandleGameStateNotify(object[] data)
         {
             GameState _gameState = (GameState)data[0];
@@ -200,12 +220,13 @@ namespace DDZ
         }
         private void OnHandleMatchResultNotify(object[] data)
         {
-            List<PlayerData> _list = data[0] as List<PlayerData>;
-            for (int i = 0; i < _list.Count; i++)
+            PlayerData[] _array = data[0] as PlayerData[];
+            for (int i = 0; i < _array.Length; i++)
             {
-                PlayerData _pd = _list[i];
+                PlayerData _pd = _array[i];
                 playerHeadArray[i].SitDown(_pd);
             }
+            EventQueue.UnLock();
         }
         private void OnHandlePlayerEnterRoomNotify(object[] data)
         {
@@ -219,22 +240,43 @@ namespace DDZ
         }
         private void OnHandleSendCardNotify(object[] data)
         {
-            var _playerCardDataList = (List<PlayerCardData>)data[0];
-            for (int i = 0; i < _playerCardDataList.Count; i++)
+            var _playerCardDataArray = (PlayerCardData[])data[0];
+            bool _immediately = (bool)data[1];
+            for (int i = 0; i < _playerCardDataArray.Length; i++)
             {
-                spGroupArray[i].ShowSP(_playerCardDataList[i].spCardList, i != 0);
+                spGroupArray[i].ShowSP(_playerCardDataArray[i].spCardList, _immediately);
             }
+        }
+        /// <summary>
+        /// 更新牌张数 因为发牌是有动画的
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnHandleShowCardUpdate(object[] data)
+        {
+            int _seatIndex = (int)data[0];
+            int _count = (int)data[1];
+            playerHeadArray[_seatIndex].SetSPLeft(_count);
         }
         /// <summary>
         /// 做底牌动画 此时不需要知道底牌
         /// </summary>
-        private void OnHandleSendCardCompleteCallBack()
+        private void OnHandleShowCardComplete(object[] data)
         {
+            bool _immediately = (bool)data[0];
+            if (_immediately)
+            {
+
+            }
+            else
+            {
+                
+            }
+            EventQueue.UnLock();
         }
         private void OnHandleCallBankerNotify(object[] data)
         {
             int _seatIndex = (int)data[0];
-            float _time = (float)data[1];
+            int _time = (int)data[1];
             int _maxScore = (int)data[2];
             clock.SetClock(clockPosArray[_seatIndex].position, _time);
             if (_seatIndex == 0)
@@ -246,7 +288,7 @@ namespace DDZ
         private void EnableCallBankerBtn(int score)
         {
             for (int i = 1; i <= score; i++)
-                callBankerBtnArray[i].enabled = false;
+                callBankerBtnArray[i].interactable = false;
         }
         private void OnHandleCallBankerResultNotify(object[] data)
         {
@@ -280,18 +322,32 @@ namespace DDZ
             int _jbNumber = (int)data[1];
             clock.StopClock();
             if (_seatIndex == 0)
-                ctpJiaBei.SetActive(true);
+                ctpJiaBei.SetActive(false);
             chatArray[_seatIndex].ShowChat(_jbNumber.ToString()+"b");
         }
         private void OnHandlePlayCardNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            float _time = (float)data[1];
+            clock.SetClock(clockPosArray[_seatIndex].position, _time);
+            if (_seatIndex == 0)
+                ctpPlayCard.SetActive(true);
         }
         private void OnHandlePlayCardResultNotify(object[] data)
         {
-
+            int _seatIndex = (int)data[0];
+            List<CardData> _cpList = (List<CardData>)data[1];
+            List<CardData> _spList = (List<CardData>)data[2];
+            cpGroupArray[_seatIndex].ShowCP(_cpList);
+            spGroupArray[_seatIndex].ShowSP(_spList, true);
+            if (_seatIndex == 0)
+                ctpPlayCard.SetActive(false);
         }
         private void OnHandleGameSettleNotify(object[] data)
+        {
+
+        }
+        private void OnHandleBSChangeNotify(object[] data)
         {
 
         }
@@ -335,6 +391,10 @@ namespace DDZ
 
         }
         private void OnClickBJB()
+        {
+
+        }
+        private void OnClickHelper()
         {
 
         }

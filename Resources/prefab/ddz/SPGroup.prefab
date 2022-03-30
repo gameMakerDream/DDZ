@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 993052750933822557}
   m_Layer: 5
-  m_Name: SPGroup
+  m_Name: spGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

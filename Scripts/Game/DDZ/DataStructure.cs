@@ -6,6 +6,7 @@ namespace DDZ
 {
     public enum GameState
     {
+        None,
         Idle,
         Match,
         SendCard,
@@ -30,13 +31,22 @@ namespace DDZ
     {
         public GameState gameState;
     }
+    public class MatchRequest
+    {
+        public PlayerData player;
+
+    }
     public class MatchResponse
     {
         
     }
     public class MatchResultNotify
     {
-        public List<PlayerData> playerDataList;
+        public PlayerData[] playerDataArray;
+        public MatchResultNotify(int maxPlayer)
+        {
+            playerDataArray = new PlayerData[maxPlayer];
+        }
     }
     public class PlayerEnterRoomNotify
     {
@@ -48,8 +58,17 @@ namespace DDZ
     }
     public class SendCardNotify
     {
-        public List<List<CardData>> spCardListArray;
+        public List<CardData>[] spCardListArray;
         public List<CardData> dpCardList;
+        public SendCardNotify(int maxPlayer)
+        {
+            spCardListArray = new List<CardData>[maxPlayer];
+            dpCardList = new List<CardData>();
+        }
+    }
+    public class CallBankerRequest: CallBankerResultNotify
+    {
+
     }
     public class CallBankerNotify
     {
@@ -60,11 +79,16 @@ namespace DDZ
     {
         public PlayerData playerData;
         public int callScore;//分数制抢地主 0不叫 1叫1分 2叫2分 3叫3分
-        public int callType;//普通制抢地主 0不叫 1叫地主 2抢地主 3不抢
+        public int callBanker;//普通制抢地主 0不叫 1叫地主 2抢地主 3不抢
+        public int callType;//0叫分制 1普通制
     }
     public class ShowBankerNotify
     {
         public PlayerData playerData;
+    }
+    public class JiaBeiRequest:JiaBeiResultNotify
+    {
+        
     }
     public class JiaBeiNotify
     {
@@ -76,6 +100,10 @@ namespace DDZ
         public PlayerData playerData;
         public int jbNumber;//0不加倍 1加倍 
     }
+    public class PlayCardRequest: PlayCardResultNotify
+    {
+        
+    }
     public class PlayCardNotify
     {
         public PlayerData playerData;
@@ -85,10 +113,18 @@ namespace DDZ
     {
         public PlayerData playerData;
         public List<CardData> cpList;
+        public PlayCardResultNotify()
+        {
+            cpList = new List<CardData>();
+        }
     }
     public class GameSettleNotify
     {
         
+    }
+    public class BSChangeNotify//倍数改变通知
+    {
+        public int bsNumber;
     }
 
 
@@ -116,10 +152,6 @@ namespace DDZ
         public string color;
         public int number;
         public string name { get; private set; }
-        public CardData()
-        {
-            
-        }
         public CardData(string color, int number)
         {
             this.color = color;
@@ -156,12 +188,24 @@ namespace DDZ
     public class DDZMainData
     {
         public RoomData roomData;
-        public List<PlayerData> playerDataList;
-        public List<PlayerCardData> playerCardDataList;
+        public PlayerData[] playerDataArray;
+        public PlayerCardData[] playerCardDataArray;
         public GameState gameState;
         public int callBankerMaxScore;
         public PlayerData bankerData;
         public List<CardData> dpCardList;
         public LastPlayCardData lastCpCardData;
+
+        public DDZMainData()
+        {
+            roomData=new RoomData();
+            playerDataArray=new PlayerData[3];
+            playerCardDataArray=new PlayerCardData[3];
+            gameState = GameState.None;
+            callBankerMaxScore=2;
+            bankerData = new PlayerData();
+            dpCardList=new List<CardData>();
+            lastCpCardData=new LastPlayCardData();
+        }
     }
 }

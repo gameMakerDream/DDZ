@@ -11,27 +11,37 @@ namespace DDZ
     {
         public override void Initialize(int seatIndex)
         {
-            this.seatIndex = seatIndex;
-            this.path = "sp/shoupai";
+            base.Initialize(seatIndex);
+            if (seatIndex == 0)
+                this.path = "sp/shoupai";
+            else
+                this.path = "mp/mp";
         }
         private void Update()
         {
         }
-        public void ShowSP(List<CardData> spList,bool immediately=false)
+        public void ShowSP(List<CardData> spList,bool immediately)
         {
             SetCard(spList);
             if (immediately)
             {
-                SortNumber(spList.Count);
+                //if(seatIndex==0)
+                //    SortNumberUp(spList.Count);
                 SortPosition(spList.Count);
                 //所有更新手牌都会走这里 包括立刻发牌
                 ShowCard(spList.Count);
+                AppFacade.Instance.SendNotification(EventName.GeShowCardUpdate, new object[] { seatIndex,spList.Count });
+                AppFacade.Instance.SendNotification(EventName.GeShowCardComplete,new object[] { immediately});
             }
             else
             {
-                //只有发牌会走这里 动画 只有本客户端玩家会 走这里
+                //只有发牌会走这里 动画 
                 SortPosition(spList.Count);
-                StartCoroutine("ShowCardAnimationClient", spList.Count);
+                if (seatIndex == 0)
+                    StartCoroutine("ShowCardAnimationClient", spList.Count);
+                else
+                    StartCoroutine("ShowCardAnimationOther", spList.Count);
+
             }
         }
         public void BeBanker(List<CardData> spList, List<CardData> dpList)
@@ -103,6 +113,7 @@ namespace DDZ
                       });
                     tweenDic.Add(_tweenName, tween);
                     _runing = true;
+                    AppFacade.Instance.SendNotification(EventName.GeShowCardUpdate, new object[] { seatIndex, _currentTimes + 1 });
                 }
                 yield return new WaitForEndOfFrame();
             }
@@ -124,7 +135,7 @@ namespace DDZ
             }
             while(_finishCount<count)
                 yield return new WaitForEndOfFrame();
-            SortNumber(count);
+            //SortNumberUp(count);
             int _times = count / 2;
             int _middleIndex = _times;
             float _onceTime = 0.04f;
@@ -163,13 +174,15 @@ namespace DDZ
                 _times = _temp;
             }
             yield return new WaitForSeconds(count / 2 * _onceTime);
-            AppFacade.Instance.SendNotification(EventName.GeSendCardComplete);
+            AppFacade.Instance.SendNotification(EventName.GeShowCardComplete,new object[] { false});
         }
         private IEnumerator ShowCardAnimationOther(int count)
         {
             for (int i = 0; i < count; i++)
             {
-                transform.GetChild(i).gameObject.SetActive(true);
+                AppFacade.Instance.SendNotification(EventName.GeShowCardUpdate, new object[] { seatIndex, i + 1 });
+                int _index = Constants.seatChildIndexArrayArray[seatIndex][i];
+                transform.GetChild(_index).gameObject.SetActive(true);
                 yield return new WaitForSeconds(0.3f);
             }
         }
