@@ -13,8 +13,8 @@ namespace DDZ
         public RectTransform rectTransform;
         private Tween tween;
         [HideInInspector]
-        public bool select;
-        public virtual void Initialize()
+        private bool select;
+        public void Initialize()
         {
             imgIcon = Util.FindDeepChildAndGetComponent<Image>(transform, "BG");
             rectTransform = GetComponent<RectTransform>();
@@ -30,6 +30,10 @@ namespace DDZ
             string path = PublicDefine.spritePath + "ddz/" + iconName;
             imgIcon.sprite = Resources.Load<Sprite>(path);
         }
+        public void SetColor(Color color)
+        {
+            imgIcon.color=color;
+        }
         public void Show()
         {
             gameObject.SetActive(true);
@@ -40,28 +44,37 @@ namespace DDZ
         }
         public void ChangeAnchors(Vector2 vector)
         {
-            GetComponent<RectTransform>().pivot = vector;
             GetComponent<RectTransform>().anchorMin = vector;
             GetComponent<RectTransform>().anchorMax = vector;
+        }
+        public void ChangePivot(Vector2 vector)
+        {
+            GetComponent<RectTransform>().pivot = vector;
         }
         public void Select()
         {
             if (select)
-            {
-                rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, -Constants.spCardHeight[0] / 2);
-                select = false;
-            }
+                Select(false);
             else
-            {
-                rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y+20);
-                select = true;
-            }
+                Select(true);
+        }
+        public void Select(bool select)
+        {
+            if (this.select == select)
+                return;
+            if (select)
+                rectTransform.DOAnchorPosY(-Constants.spCardHeight[0] / 2 + 20, 0.1f).SetEase(Ease.Linear);
+            else
+                rectTransform.DOAnchorPosY(-Constants.spCardHeight[0] / 2, 0.1f).SetEase(Ease.Linear);
+            this.select = select;
         }
         public void OnPointerDown(PointerEventData eventData)
         {
             if (CanOpreate())
             {
-                
+                Constants.startDrag = true;
+                Constants.startDragCardIndex = transform.GetSiblingIndex();
+                Constants.endDragCardIndex = transform.GetSiblingIndex();
             }
         }
 
@@ -70,7 +83,7 @@ namespace DDZ
 
             if (CanOpreate())
             {
-
+                Constants.endDragCardIndex = transform.GetSiblingIndex();
             }
         }
 
@@ -79,12 +92,16 @@ namespace DDZ
 
             if (CanOpreate())
             {
-
+                Constants.endDrag = true;
             }
         }
         private bool CanOpreate()
         {
-            return Constants.gameState == GameState.PlayCard;
+            return true;
+        }
+        public bool IsSelect()
+        {
+            return select;
         }
     }
 

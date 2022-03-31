@@ -16,18 +16,39 @@ namespace DDZ
                 this.path = "sp/shoupai";
             else
                 this.path = "mp/mp";
+            this.cardWidthArray = Constants.spCardWidth;
+            this.cardHightArray = Constants.spCardHeight;
+            this.cardIntervalArray = Constants.spCardInterval;
+            this.cardOffsetY = -40;
         }
         private void Update()
         {
+            if (seatIndex == 0)
+            {
+                if(Constants.startDrag)
+                {
+                    if (Constants.startDragCardIndex != -1 && Constants.endDragCardIndex != -1)
+                    {
+                        PrepareSelectCard();
+                    }
+                }
+                if (Constants.endDrag)
+                {
+                    SelectCard(GetBetweenStartAndEndCard());
+                    Constants.startDragCardIndex = -1;
+                    Constants.endDragCardIndex = -1;
+                    Constants.startDrag = false;
+                    Constants.endDrag = false;
+                }
+            }
         }
         public void ShowSP(List<CardData> spList,bool immediately)
         {
             SetCard(spList);
+            if(seatIndex==0)
+                SortPosition(spList.Count);
             if (immediately)
             {
-                //if(seatIndex==0)
-                //    SortNumberUp(spList.Count);
-                SortPosition(spList.Count);
                 //所有更新手牌都会走这里 包括立刻发牌
                 ShowCard(spList.Count);
                 AppFacade.Instance.SendNotification(EventName.GeShowCardUpdate, new object[] { seatIndex,spList.Count });
@@ -36,7 +57,6 @@ namespace DDZ
             else
             {
                 //只有发牌会走这里 动画 
-                SortPosition(spList.Count);
                 if (seatIndex == 0)
                     StartCoroutine("ShowCardAnimationClient", spList.Count);
                 else
@@ -51,16 +71,13 @@ namespace DDZ
         }
         private void ShowDP(List<CardData> dpList)
         {
+            List<Card> _cardList = new List<Card>();
             for (int i = 0; i < dpList.Count; i++)
             {
                 string _dpName = dpList[i].name;
-                for (int j = 0; j < transform.childCount; j++)
-                {
-                    Card _card= transform.GetChild(i).GetComponent<Card>();
-                    if (_dpName == _card.name)
-                        _card.Select();
-                }
+                _cardList.Add(GetCardByName(_dpName));
             }
+            SelectCard(_cardList);
         }
         private IEnumerator ShowCardAnimationClient(int count)
         {
@@ -186,19 +203,81 @@ namespace DDZ
                 yield return new WaitForSeconds(0.3f);
             }
         }
-        private float[] GetPosXByCount(int count)
+
+        private void PrepareSelectCard()
         {
-            float[] _xArray = new float[count];
-            float _groupWidth = GetComponent<RectTransform>().rect.width;
-            float _totalCardWidth = (count - 1) * Constants.spCardInterval[seatIndex]+Constants.spCardWidth[seatIndex];
-            float _x = (_groupWidth - _totalCardWidth) / 2 + Constants.spCardWidth[seatIndex] / 2;
-            _xArray[0] = _x;
-            for (int i = 1; i < count; i++)
+            AllWhite();
+            List<Card> _cardList = GetBetweenStartAndEndCard();
+            for (int i = 0; i < _cardList.Count; i++)
             {
-                _x+=Constants.spCardInterval[seatIndex];
-                _xArray[i] = _x;
+                Card _card = _cardList[i];
+                _card.SetColor(Color.gray);
             }
-            return _xArray;
+        }
+        private void SelectCard(List<Card> cardList)
+        {
+            for (int i = 0; i < cardList.Count; i++)
+            {
+                Card _card = cardList[i];
+                _card.SetColor(Color.white);
+                _card.Select();
+            }
+        }
+        private List<Card> GetBetweenStartAndEndCard()
+        {
+            List<Card> _result = new List<Card>();
+            int _startIndex = Constants.startDragCardIndex;
+            int _endIndex = Constants.endDragCardIndex;
+            if (_startIndex > _endIndex)
+            {
+                int _temp = _startIndex;
+                _startIndex = _endIndex;
+                _endIndex = _temp;
+            }
+            for (int i = _startIndex; i <= _endIndex; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                _result.Add(_card);
+            }
+            return _result;
+        }
+        private Card GetCardByName(string cardName)
+        {
+            for (int i = 0; i < validChildCount; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                if (cardName == _card.name)
+                    return _card;
+            }
+            return null;
+        }
+        public List<string> GetSelectCardData()
+        {
+            List<string> _result = new List<string>();
+            for (int i = 0; i < validChildCount; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                if (_card.IsSelect())
+                    _result.Add(_card.name);
+            }
+            return _result;
+        }
+        private void AllWhite()
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                _card.SetColor(Color.white);
+            }
+        }
+        private void AllDown()
+        {
+            AllWhite();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Card _card = transform.GetChild(i).GetComponent<Card>();
+                _card.Select(false);
+            }
         }
     }
 }

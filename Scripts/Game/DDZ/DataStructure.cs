@@ -151,17 +151,23 @@ namespace DDZ
 
         public string color;
         public int number;
-        public string name { get; private set; }
+        public string name 
+        {
+            get { return color + number.ToString("D2"); }
+        }
+        public CardData()
+        {
+            
+        }
         public CardData(string color, int number)
         {
             this.color = color;
             this.number = number;
-            this.name =color+ number.ToString("D2");
         }
     }
     public class PlayerData//和服务器通用
     {
-        public string userId;
+        public int userId;
         public string nickName;
         public float coin;
         public int sex;

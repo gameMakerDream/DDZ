@@ -10,7 +10,7 @@ namespace DDZ
     void Start()
         {
             UserData ud = new UserData();
-            ud.userId = "1";
+            ud.userId = 1;
             AppFacade.Instance.RegisterProxy(new UserDataProxy(ud));
             AppFacade.Instance.RegisterProxy(new DDZMainDataProxy());
             AppFacade.Instance.RegisterMediator(new DDZMainMediator(GameObject.Find("Canvas")));
@@ -34,7 +34,7 @@ namespace DDZ
                 pd.nickName = "asdasd" + i;
                 pd.coin = 123123123;
                 pd.serverSeatIndex = i;
-                pd.userId = i.ToString();
+                pd.userId = i;
                 mrn.playerDataArray[i]=pd;
             }
             sm.name = EventName.MatchResultNotify;
@@ -47,8 +47,8 @@ namespace DDZ
                 var a = new List<CardData>();
                 for (int j = 0; j < 17; j++)
                 {
-                    var d = Random.Range(1, 3).ToString();
-                    var c = Random.Range(3, 12);
+                    var d = "1";
+                    var c = 5;
                     var b = new CardData(d, c);
                     a.Add(b);
                     Debug.Log(d);
@@ -57,8 +57,8 @@ namespace DDZ
             }
             for (int i = 0; i < 3; i++)
             {
-                var a = Random.Range(1, 3).ToString();
-                var c = Random.Range(3, 12);
+                var a = "1";
+                var c = 5;
                 var b = new CardData(a, c);
                 scn.dpCardList.Add(b);
                 Debug.Log(a);
@@ -67,15 +67,19 @@ namespace DDZ
             sm.body = scn;
             SCMessage.Instance.Decode(sm);
             yield return new WaitForSeconds(1);
-            CallBankerNotify cbn=new CallBankerNotify();
+            PlayCardResultNotify cbn=new PlayCardResultNotify();
             var pd1 = new PlayerData();
             pd1.nickName = "asdasd";
             pd1.coin = 123123123;
-            pd1.serverSeatIndex = 1;
-            pd1.userId = "1";
+            pd1.serverSeatIndex = 2;
+            pd1.userId = 1;
             cbn.playerData = pd1;
-            cbn.time = 50;
-            sm.name = EventName.CallBankerNotify;
+            for (int i = 0; i < 12; i++)
+            {
+                CardData _cd = new CardData("1",5);
+                cbn.cpList.Add(_cd);
+            }
+            sm.name = EventName.PlayCardResultNotify;
             sm.body = cbn;
             SCMessage.Instance.Decode(sm);
         }

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,14 @@ using UnityEngine.UI;
 public class Helper : MonoBehaviour
 {
     private Text[] txtArray;
+    private Button btnClose;
+    public Action<bool> helperActiveCallBack;
     // Start is called before the first frame update
     public void Initialize()
     {
         txtArray = GetComponentsInChildren<Text>();
+        btnClose=GetComponentInChildren<Button>();
+        btnClose.onClick.AddListener(Hide);
     }
 
     // Update is called once per frame
@@ -18,16 +23,18 @@ public class Helper : MonoBehaviour
     {
         
     }
-    public void Show(string[] leftCardArray)
+    public void Show()
     {
         gameObject.SetActive(true);
-        transform.DOScaleX(1, 0.5f);
+        transform.DOScaleX(1, 0.2f).SetEase(Ease.Linear);
+        helperActiveCallBack(false);
     }
     public void Hide()
     {
-        transform.DOScaleX(0, 0.5f).OnComplete(() => 
+        transform.DOScaleX(0, 0.2f).SetEase(Ease.Linear).OnComplete(() => 
         {
             gameObject.SetActive(false);
+            helperActiveCallBack(true);
         });
     }
     public void Set(string[] leftCardArray)

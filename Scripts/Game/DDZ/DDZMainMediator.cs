@@ -91,7 +91,6 @@ namespace DDZ
             }
             clock.Initialize();
             helper.Initialize();
-
             tgeMenu.onValueChanged.AddListener(OnValueChangedMenu);
             btnPlayCard.onClick.AddListener(OnClickPlayCard);
             btnHint.onClick.AddListener(OnClickHint);
@@ -100,6 +99,8 @@ namespace DDZ
             btnCJJB.onClick.AddListener(OnClickCJJB);
             btnBJB.onClick.AddListener(OnClickBJB);
             btnHelper.onClick.AddListener(OnClickHelper);
+
+            helper.helperActiveCallBack +=(active)=>btnHelper.gameObject.SetActive(active);
         }
 
         public override string[] ListNotificationInterests()
@@ -202,6 +203,8 @@ namespace DDZ
                 case GameState.CallBanker:
                     break;
                 case GameState.ShowBanker:
+                    string[] _leftCardArray = (string[])data[1];
+                    helper.Set(_leftCardArray);
                     break;
                 case GameState.JiaBei:
                     break;
@@ -396,7 +399,7 @@ namespace DDZ
         }
         private void OnClickHelper()
         {
-
+            helper.Show();
         }
     }
 

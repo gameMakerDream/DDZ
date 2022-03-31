@@ -106,7 +106,7 @@ namespace DDZ
             return ddzProxy.OnSetPlayerExitRoomNotify(_pern);
 
         }
-        private object[] OnDecodeSendCardNotify(object data,bool immediately=false)
+        private object[] OnDecodeSendCardNotify(object data,bool immediately=true)
         {
             SendCardNotify _scn = data as SendCardNotify;
             return ddzProxy.OnSetSendCardNotify(_scn, immediately);

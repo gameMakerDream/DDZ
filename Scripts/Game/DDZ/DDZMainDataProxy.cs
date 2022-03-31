@@ -35,7 +35,33 @@ namespace DDZ
         {
             VO.gameState = data.gameState;
             Constants.gameState = data.gameState;
-            return new object[] { VO.gameState };
+            List<object> _result = new List<object>();
+            _result.Add(VO.gameState);
+            switch (data.gameState)
+            {
+                case GameState.None:
+                    break;
+                case GameState.Idle:
+                    break;
+                case GameState.Match:
+                    break;
+                case GameState.SendCard:
+                    break;
+                case GameState.CallBanker:
+                    break;
+                case GameState.ShowBanker:
+                    _result.Add(GetLeftCard());
+                    break;
+                case GameState.JiaBei:
+                    break;
+                case GameState.PlayCard:
+                    break;
+                case GameState.Settle:
+                    break;
+                default:
+                    break;
+            }
+            return _result.ToArray();
         }
         public object[] OnSetMatchResponse(MatchResponse data)
         {
@@ -129,6 +155,7 @@ namespace DDZ
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
             VO.lastCpCardData.clientSeat = _clientSeatIndex;
+            data.cpList.Sort(CompareUp);
             VO.lastCpCardData.cpList = data.cpList;
             var _spList = VO.playerCardDataArray[_clientSeatIndex].spCardList;
             for (int i = 0; i < data.cpList.Count; i++)
@@ -165,6 +192,20 @@ namespace DDZ
             }
             return -1;
         }
+        private string[] GetLeftCard()
+        {
+            List<string> _resultList = new List<string>();
+            for (int i = 1; i < VO.playerCardDataArray.Length; i++)
+            {
+                PlayerCardData _pcd = VO.playerCardDataArray[i];
+                foreach (CardData _cd in _pcd.spCardList)
+                {
+                    _resultList.Add(_cd.name);
+                }
+            }
+            return _resultList.ToArray();
+        }
+
         private int CompareUp(CardData a, CardData b)
         {
             return a.number.CompareTo(b.number);
