@@ -106,14 +106,14 @@ namespace DDZ
             {
                 PlayerCardData _pcd = new PlayerCardData();
                 int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(i);
-                _pcd.spCardList = data.spCardListArray[i];
+                _pcd.spCardList = Translate2CardDataList(data.spCardListArray[i]);
                 if (_clientSeatIndex == 0)
                     _pcd.spCardList.Sort(CompareDown);
                 else
                     _pcd.spCardList.Sort(CompareUp);
                 VO.playerCardDataArray[_clientSeatIndex] = _pcd;
             }
-            VO.dpCardList = data.dpCardList;
+            VO.dpCardList = Translate2CardDataList(data.dpCardList);
             return new object[] { VO.playerCardDataArray, immediately };
         }
 
@@ -155,8 +155,8 @@ namespace DDZ
         {
             int _clientSeatIndex = GetPlayerClientSeatIndexByServerSeat(data.playerData.serverSeatIndex);
             VO.lastCpCardData.clientSeat = _clientSeatIndex;
-            data.cpList.Sort(CompareUp);
-            VO.lastCpCardData.cpList = data.cpList;
+            VO.lastCpCardData.cpList = Translate2CardDataList(data.cpList);
+            VO.lastCpCardData.cpList.Sort(CompareUp);
             var _spList = VO.playerCardDataArray[_clientSeatIndex].spCardList;
             for (int i = 0; i < data.cpList.Count; i++)
             {
@@ -164,7 +164,7 @@ namespace DDZ
                 for (int j = 0; j < _spList.Count; j++)
                 {
                     var _b=_spList[j];
-                    if (_a.name == _b.name)
+                    if (_a == _b.code)
                     {
                         _spList.Remove(_b);
                         break;
@@ -205,7 +205,17 @@ namespace DDZ
             }
             return _resultList.ToArray();
         }
-
+        private List<CardData> Translate2CardDataList(List<int> cardCodeList)
+        {
+            List<CardData> _cardDataList = new List<CardData>();
+            for (int i = 0; i < cardCodeList.Count; i++)
+            {
+                int _cc = cardCodeList[i];
+                CardData _cd = new CardData(_cc);
+                _cardDataList.Add(_cd);
+            }
+            return _cardDataList;
+        }
         private int CompareUp(CardData a, CardData b)
         {
             return a.number.CompareTo(b.number);

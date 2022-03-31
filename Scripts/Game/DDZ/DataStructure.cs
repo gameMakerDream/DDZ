@@ -58,12 +58,12 @@ namespace DDZ
     }
     public class SendCardNotify
     {
-        public List<CardData>[] spCardListArray;
-        public List<CardData> dpCardList;
+        public List<int>[] spCardListArray;
+        public List<int> dpCardList;
         public SendCardNotify(int maxPlayer)
         {
-            spCardListArray = new List<CardData>[maxPlayer];
-            dpCardList = new List<CardData>();
+            spCardListArray = new List<int>[maxPlayer];
+            dpCardList = new List<int>();
         }
     }
     public class CallBankerRequest: CallBankerResultNotify
@@ -112,10 +112,10 @@ namespace DDZ
     public class PlayCardResultNotify
     {
         public PlayerData playerData;
-        public List<CardData> cpList;
+        public List<int> cpList;
         public PlayCardResultNotify()
         {
-            cpList = new List<CardData>();
+            cpList = new List<int>();
         }
     }
     public class GameSettleNotify
@@ -149,20 +149,20 @@ namespace DDZ
     public class CardData//和服务器通用
     {
 
-        public string color;
+        public int color;
         public int number;
-        public string name 
-        {
-            get { return color + number.ToString("D2"); }
-        }
+        public int code;
+        public string name;
         public CardData()
         {
             
         }
-        public CardData(string color, int number)
+        public CardData(int code)
         {
-            this.color = color;
-            this.number = number;
+            this.color = code & 0xF0;
+            this.number = code & 0x0F;
+            this.code = code;
+            this.name = code.ToString();
         }
     }
     public class PlayerData//和服务器通用

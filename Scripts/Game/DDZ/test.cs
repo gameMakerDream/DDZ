@@ -24,64 +24,64 @@ namespace DDZ
 
         }
 
-        IEnumerator test1()
-        {
-            ServerMessage sm = new ServerMessage();
-            MatchResultNotify mrn=new MatchResultNotify(3);
-            for (int i = 0; i < 3; i++)
-            {
-                var pd = new PlayerData();
-                pd.nickName = "asdasd" + i;
-                pd.coin = 123123123;
-                pd.serverSeatIndex = i;
-                pd.userId = i;
-                mrn.playerDataArray[i]=pd;
-            }
-            sm.name = EventName.MatchResultNotify;
-            sm.body = mrn;
-            SCMessage.Instance.Decode(sm);
-            yield return new WaitForSeconds(2);
-            SendCardNotify scn=new SendCardNotify(3);
-            for (int i = 0; i < 3; i++)
-            {
-                var a = new List<CardData>();
-                for (int j = 0; j < 17; j++)
-                {
-                    var d = "1";
-                    var c = 5;
-                    var b = new CardData(d, c);
-                    a.Add(b);
-                    Debug.Log(d);
-                }
-                scn.spCardListArray[i] = a;
-            }
-            for (int i = 0; i < 3; i++)
-            {
-                var a = "1";
-                var c = 5;
-                var b = new CardData(a, c);
-                scn.dpCardList.Add(b);
-                Debug.Log(a);
-            }
-            sm.name = EventName.SendCardNotify;
-            sm.body = scn;
-            SCMessage.Instance.Decode(sm);
-            yield return new WaitForSeconds(1);
-            PlayCardResultNotify cbn=new PlayCardResultNotify();
-            var pd1 = new PlayerData();
-            pd1.nickName = "asdasd";
-            pd1.coin = 123123123;
-            pd1.serverSeatIndex = 2;
-            pd1.userId = 1;
-            cbn.playerData = pd1;
-            for (int i = 0; i < 12; i++)
-            {
-                CardData _cd = new CardData("1",5);
-                cbn.cpList.Add(_cd);
-            }
-            sm.name = EventName.PlayCardResultNotify;
-            sm.body = cbn;
-            SCMessage.Instance.Decode(sm);
-        }
+        //IEnumerator test1()
+        //{
+        //    //ServerMessage sm = new ServerMessage();
+        //    //MatchResultNotify mrn=new MatchResultNotify(3);
+        //    //for (int i = 0; i < 3; i++)
+        //    //{
+        //    //    var pd = new PlayerData();
+        //    //    pd.nickName = "asdasd" + i;
+        //    //    pd.coin = 123123123;
+        //    //    pd.serverSeatIndex = i;
+        //    //    pd.userId = i;
+        //    //    mrn.playerDataArray[i]=pd;
+        //    //}
+        //    //sm.name = EventName.MatchResultNotify;
+        //    //sm.body = mrn;
+        //    //SCMessage.Instance.Decode(sm);
+        //    //yield return new WaitForSeconds(2);
+        //    //SendCardNotify scn=new SendCardNotify(3);
+        //    //for (int i = 0; i < 3; i++)
+        //    //{
+        //    //    var a = new List<CardData>();
+        //    //    for (int j = 0; j < 17; j++)
+        //    //    {
+        //    //        var d = "1";
+        //    //        var c = 5;
+        //    //        var b = new CardData(d, c);
+        //    //        a.Add(b);
+        //    //        Debug.Log(d);
+        //    //    }
+        //    //    scn.spCardListArray[i] = a;
+        //    //}
+        //    //for (int i = 0; i < 3; i++)
+        //    //{
+        //    //    var a = "1";
+        //    //    var c = 5;
+        //    //    var b = new CardData(a, c);
+        //    //    scn.dpCardList.Add(b);
+        //    //    Debug.Log(a);
+        //    //}
+        //    //sm.name = EventName.SendCardNotify;
+        //    //sm.body = scn;
+        //    //SCMessage.Instance.Decode(sm);
+        //    //yield return new WaitForSeconds(1);
+        //    //PlayCardResultNotify cbn=new PlayCardResultNotify();
+        //    //var pd1 = new PlayerData();
+        //    //pd1.nickName = "asdasd";
+        //    //pd1.coin = 123123123;
+        //    //pd1.serverSeatIndex = 2;
+        //    //pd1.userId = 1;
+        //    //cbn.playerData = pd1;
+        //    //for (int i = 0; i < 12; i++)
+        //    //{
+        //    //    CardData _cd = new CardData("1",5);
+        //    //    cbn.cpList.Add(_cd);
+        //    //}
+        //    //sm.name = EventName.PlayCardResultNotify;
+        //    //sm.body = cbn;
+        //    //SCMessage.Instance.Decode(sm);
+        //}
     }
 }
