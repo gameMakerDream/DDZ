@@ -163,6 +163,23 @@ namespace DDZ
             this.number = code & 0x0F;
             this.code = code;
             this.name = code.ToString();
+            switch (this.number)
+            {
+                case 1:
+                    this.number = 14;
+                    break;
+                case 2:
+                    this.number = 15;
+                    break;
+                case 14:
+                    this.number = 16;
+                    break;
+                case 15:
+                    this.number = 17;
+                    break;
+                default:
+                    break;
+            }
         }
     }
     public class PlayerData//和服务器通用
@@ -208,7 +225,7 @@ namespace DDZ
             playerDataArray=new PlayerData[3];
             playerCardDataArray=new PlayerCardData[3];
             gameState = GameState.None;
-            callBankerMaxScore=2;
+            callBankerMaxScore=0;
             bankerData = new PlayerData();
             dpCardList=new List<CardData>();
             lastCpCardData=new LastPlayCardData();
