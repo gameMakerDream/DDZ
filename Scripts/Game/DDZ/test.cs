@@ -15,6 +15,8 @@ namespace DDZ
             AppFacade.Instance.RegisterProxy(new DDZMainDataProxy());
             AppFacade.Instance.RegisterMediator(new DDZMainMediator(GameObject.Find("Canvas")));
             SCMessage.Instance.Initialize();
+            AlgorithmHelper.FindThreeByDouble(3);
+
             //StartCoroutine("test1");
         }
 

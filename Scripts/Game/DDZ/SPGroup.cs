@@ -34,7 +34,7 @@ namespace DDZ
                 }
                 if (Constants.endDrag)
                 {
-                    SelectCard(GetBetweenStartAndEndCard());
+                    SelectCard(GetBetweenStartAndEndCardName());
                     Constants.startDragCardIndex = -1;
                     Constants.endDragCardIndex = -1;
                     Constants.startDrag = false;
@@ -71,11 +71,10 @@ namespace DDZ
         }
         private void ShowDP(List<CardData> dpList)
         {
-            List<Card> _cardList = new List<Card>();
+            List<string> _cardList = new List<string>();
             for (int i = 0; i < dpList.Count; i++)
             {
-                string _dpName = dpList[i].name;
-                _cardList.Add(GetCardByName(_dpName));
+                _cardList.Add(dpList[i].name);
             }
             SelectCard(_cardList);
         }
@@ -207,25 +206,25 @@ namespace DDZ
         private void PrepareSelectCard()
         {
             AllWhite();
-            List<Card> _cardList = GetBetweenStartAndEndCard();
-            for (int i = 0; i < _cardList.Count; i++)
+            List<string> _cardNameList = GetBetweenStartAndEndCardName();
+            for (int i = 0; i < _cardNameList.Count; i++)
             {
-                Card _card = _cardList[i];
+                Card _card = GetCardByName(_cardNameList[i]);
                 _card.SetColor(Color.gray);
             }
         }
-        private void SelectCard(List<Card> cardList)
+        private void SelectCard(List<string> cardNameList)
         {
-            for (int i = 0; i < cardList.Count; i++)
+            for (int i = 0; i < cardNameList.Count; i++)
             {
-                Card _card = cardList[i];
+                Card _card = GetCardByName(cardNameList[i]);
                 _card.SetColor(Color.white);
                 _card.Select();
             }
         }
-        private List<Card> GetBetweenStartAndEndCard()
+        private List<string> GetBetweenStartAndEndCardName()
         {
-            List<Card> _result = new List<Card>();
+            List<string> _result = new List<string>();
             int _startIndex = Constants.startDragCardIndex;
             int _endIndex = Constants.endDragCardIndex;
             if (_startIndex > _endIndex)
@@ -236,8 +235,19 @@ namespace DDZ
             }
             for (int i = _startIndex; i <= _endIndex; i++)
             {
+                string _cardName = transform.GetChild(i).name;
+                _result.Add(_cardName);
+            }
+            return _result;
+        }
+        public List<string> GetSelectCardData()
+        {
+            List<string> _result = new List<string>();
+            for (int i = 0; i < validChildCount; i++)
+            {
                 Card _card = transform.GetChild(i).GetComponent<Card>();
-                _result.Add(_card);
+                if (_card.IsSelect())
+                    _result.Add(_card.name);
             }
             return _result;
         }
@@ -251,17 +261,7 @@ namespace DDZ
             }
             return null;
         }
-        public List<string> GetSelectCardData()
-        {
-            List<string> _result = new List<string>();
-            for (int i = 0; i < validChildCount; i++)
-            {
-                Card _card = transform.GetChild(i).GetComponent<Card>();
-                if (_card.IsSelect())
-                    _result.Add(_card.name);
-            }
-            return _result;
-        }
+
         private void AllWhite()
         {
             for (int i = 0; i < transform.childCount; i++)
