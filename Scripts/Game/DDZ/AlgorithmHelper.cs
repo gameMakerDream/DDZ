@@ -40,65 +40,91 @@ namespace DDZ
             spDataArray = new List<CardData>(proxy.VO.playerCardDataArray[0].spCardList).ToArray();
             if (_lpcd.clientSeat == 0)
             {
-
+                HintForRun();
             }
             else
             {
                 object[] _typeAndMin = GetTypeAndMin(_lpcd.cpList.ToArray());
                 CardType _cardType = (CardType)_typeAndMin[0];
                 int _min = (int)_typeAndMin[1];
-                HintForFight(_cardType, _min);
+                HintForFight(_cardType, _min,_lpcd.cpList.Count);
             }
         }
-        private static void HintForFight(CardType cardType, int min)
+        private static List<List<int>> HintForFight(CardType cardType, int min,int count)
         {
+            List<List<int>> _result = new List<List<int>>();
             switch (cardType)
             {
                 case CardType.None:
                     break;
                 case CardType.Single:
+                    _result = FindSingle(min);
                     break;
                 case CardType.Double:
+                    _result = FindSingle(min);
                     break;
                 case CardType.Three:
+                    _result = FindSingle(min);
                     break;
                 case CardType.Boom4:
+                    _result = FindBoom(min, count);
                     break;
                 case CardType.Boom5:
+                    _result = FindBoom(min, count);
                     break;
                 case CardType.Boom6:
+                    _result = FindBoom(min, count);
                     break;
                 case CardType.Boom7:
+                    _result = FindBoom(min, count);
                     break;
                 case CardType.Boom8:
+                    _result = FindBoom(min, count);
                     break;
                 case CardType.ThreeBySingle:
+                    _result = FindThreeBySingle(min);
                     break;
                 case CardType.ThreeByDouble:
+                    _result = FindThreeByDouble(min);
                     break;
                 case CardType.FourByDouble:
+                    _result = FindFourByDouble(min);
                     break;
                 case CardType.FourBy2Double:
+                    _result = FindFourBy2Double(min);
                     break;
                 case CardType.Straight:
+                    _result = FindStraight(min,count);
                     break;
                 case CardType.DoubleStraight:
+                    _result = FindDoubleStraight(min,count);
                     break;
                 case CardType.Plane:
+                    _result = FindPlane(min,count);
                     break;
                 case CardType.PlaneBySingle:
+                    _result = FindPlaneBySingle(min, count);
                     break;
                 case CardType.PlaneByDouble:
+                    _result = FindPlaneByDouble(min, count);
                     break;
                 case CardType.Rocket:
                     break;
                 default:
                     break;
             }
+            return _result;
         }
-        private static void HintForRun()
+        public static List<List<int>> HintForRun()
         {
-
+            List<List<int>> _result = new List<List<int>>();
+            var _result1 = FindSingle(2);
+            var _result2 = FindDouble(2);
+            var _result3 = FindThree(2);
+            _result.AddRange(_result1);
+            _result.AddRange(_result2);
+            _result.AddRange(_result3);
+            return _result;
         }
         private static object[] GetTypeAndMin(CardData[] array)
         {
@@ -407,7 +433,7 @@ namespace DDZ
         private static List<List<int>> FindSingle(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = Translate(spDataArray);
+            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
             int _minCount = 1;
             int _maxCount = 3;
             min = min + 1;
@@ -418,18 +444,19 @@ namespace DDZ
                     List<int> _group = new List<int>();
                     if (_array[j] == i)
                     {
-                        _group.Add(i);
+                        _group.Add(j);
                         _result.Add(_group);
                     }
                 }
             }
-
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
             return _result;
         }
         private static List<List<int>> FindDouble(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = Translate(spDataArray);
+            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
             int _minCount = 2;
             int _maxCount = 3;
             min = min + 1;
@@ -440,18 +467,20 @@ namespace DDZ
                     List<int> _group = new List<int>();
                     if (_array[j] == i)
                     {
-                        _group.Add(i);
-                        _group.Add(i);
+                        _group.Add(j);
+                        _group.Add(j);
                         _result.Add(_group);
                     }
                 }
             }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
             return _result;
         }
         private static List<List<int>> FindThree(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = Translate(spDataArray);
+            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
             int _minCount = 3;
             int _maxCount = 3;
             min = min + 1;
@@ -462,13 +491,15 @@ namespace DDZ
                     List<int> _group = new List<int>();
                     if (_array[j] == i)
                     {
-                        _group.Add(i);
-                        _group.Add(i);
-                        _group.Add(i);
+                        _group.Add(j);
+                        _group.Add(j);
+                        _group.Add(j);
                         _result.Add(_group);
                     }
                 }
             }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
             return _result;
         }
         private static List<List<int>> FindBoom(int min, int count)
@@ -487,24 +518,109 @@ namespace DDZ
                     List<int> _group = new List<int>();
                     if (_array[j] == i)
                     {
-                        _group.Add(i);
-                        _group.Add(i);
-                        _group.Add(i);
-                        _group.Add(i);
+                        for (int k = 0; k < i; k++)
+                            _group.Add(j);
                         _result.Add(_group);
                     }
                 }
             }
+            if (_result.Count == 0)
+                return FindRocket();
             return _result;
         }
-        private static List<List<int>> FindThreeByOne(int min)
+        private static List<List<int>> FindThreeBySingle(int min)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            int _viceMinCount = 1;
+            int _viceMaxCount = 3;
+            min = min + 1;
+            for (int i = min; i < 16; i++)
+            {
+                if (_array[i] == 3)
+                {
+                    int[] _temp = (int[])_array.Clone();
+                    int _main = i; int _vice = 0;
+                    _temp[i] = 0;//防止后面需要再4张以上来找三张的话 找到的副牌和主牌成为一个炸弹 所以这里把所有这张牌都去掉
+                    for (int j = _viceMinCount; j <= _viceMaxCount; j++)
+                    {
+                        for (int k = 3; k < _temp.Length; k++)
+                        {
+                            if (_temp[k] == j)
+                            {
+                                _vice = k;
+                                break;
+                            }
+                        }
+                        if (_vice != 0)
+                            break;
+                    }
+                    if (_vice != 0)
+                    {
+                        List<int> _group = new List<int>();
+                        _group.Add(_main);
+                        _group.Add(_main);
+                        _group.Add(_main);
+                        _group.Add(_vice);
+                        _result.Add(_group);
+                    }
+                }
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindThreeByDouble(int min)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            int _viceMinCount = 2;
+            int _viceMaxCount = 3;
+            min = min + 1;
+            for (int i = min; i < 16; i++)
+            {
+                if (_array[i] == 3)
+                {
+                    int[] _temp = (int[])_array.Clone();
+                    int _main = i; int _vice = 0;
+                    _temp[i] = 0;//防止后面需要再4张以上来找三张的话 找到的副牌和主牌成为一个炸弹 所以这里把所有这张牌都去掉
+                    for (int j = _viceMinCount; j <= _viceMaxCount; j++)
+                    {
+                        for (int k = 3; k < _temp.Length; k++)
+                        {
+                            if (_temp[k] == j)
+                            {
+                                _vice = k;
+                                break;
+                            }
+                        }
+                        if (_vice!=0)
+                            break;
+                    }
+                    if (_vice != 0)
+                    {
+                        List<int> _group = new List<int>();
+                        _group.Add(_main);
+                        _group.Add(_main);
+                        _group.Add(_main);
+                        _group.Add(_vice);
+                        _group.Add(_vice);
+                        _result.Add(_group);
+                    }
+                }
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindFourByDouble(int min)
         {
             List<List<int>> _result = new List<List<int>>();
             List<int> _mainList = new List<int>();
             List<int> _viceList = new List<int>();
             int[] _array = Translate(spDataArray);
-            int _mainMinCount = 3;
-            int _mainMaxCount = 3;
+            int _mainMinCount = 4;
+            int _mainMaxCount = 4;
             int _viceMinCount = 1;
             int _viceMaxCount = 3;
             min = min + 1;
@@ -514,7 +630,7 @@ namespace DDZ
                 {
                     if (_array[j] == i)
                     {
-                        _array[j] -= i;//防止后面需要再4张以上来找三张的话 找到的副牌和主牌成为一个炸弹 所以这里把所有这张牌都去掉
+                        _array[j] -= i;
                         _mainList.Add(j);
                     }
                 }
@@ -524,10 +640,13 @@ namespace DDZ
                 for (int j = 3; j < _array.Length; j++)
                 {
                     if (_array[j] == i)
-                        _viceList.Add(j);
+                    {
+                        for (int k = 0; k < i; k++)
+                            _viceList.Add(j);
+                    }
                 }
             }
-            if (_mainList.Count != 0 && _viceList.Count != 0)
+            if (_mainList.Count != 0 && _viceList.Count >=2)
             {
                 for (int i = 0; i < _mainList.Count; i++)
                 {
@@ -535,20 +654,23 @@ namespace DDZ
                     _group.Add(_mainList[i]);
                     _group.Add(_mainList[i]);
                     _group.Add(_mainList[i]);
-                    _group.Add(_viceList[i%_viceList.Count]);
+                    _group.Add(_viceList[i % _viceList.Count]);
+                    _group.Add(_viceList[(i + 1) % _viceList.Count]);
                     _result.Add(_group);
                 }
             }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
             return _result;
         }
-        private static List<List<int>> FindThreeByDouble(int min)
+        private static List<List<int>> FindFourBy2Double(int min)
         {
             List<List<int>> _result = new List<List<int>>();
             List<int> _mainList = new List<int>();
             List<int> _viceList = new List<int>();
-            int[] _array = new int[] { 0, 0, 0, 2, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 1, 4, 4, 4 };
-            int _mainMinCount = 3;
-            int _mainMaxCount = 3;
+            int[] _array = Translate(spDataArray);
+            int _mainMinCount = 4;
+            int _mainMaxCount = 4;
             int _viceMinCount = 2;
             int _viceMaxCount = 3;
             min = min + 1;
@@ -558,7 +680,7 @@ namespace DDZ
                 {
                     if (_array[j] == i)
                     {
-                        _array[j] -= i;//防止后面需要再4张以上来找三张的话 找到的副牌和主牌成为一个炸弹 所以这里把所有这张牌都去掉
+                        _array[j] -= i;
                         _mainList.Add(j);
                     }
                 }
@@ -571,7 +693,7 @@ namespace DDZ
                         _viceList.Add(j);
                 }
             }
-            if (_mainList.Count != 0 && _viceList.Count != 0)
+            if (_mainList.Count != 0 && _viceList.Count >= 2)
             {
                 for (int i = 0; i < _mainList.Count; i++)
                 {
@@ -581,9 +703,217 @@ namespace DDZ
                     _group.Add(_mainList[i]);
                     _group.Add(_viceList[i % _viceList.Count]);
                     _group.Add(_viceList[i % _viceList.Count]);
+                    _group.Add(_viceList[(i+1) % _viceList.Count]);
+                    _group.Add(_viceList[(i+1) % _viceList.Count]);
                     _result.Add(_group);
                 }
             }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindStraight(int min,int count)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            min = min + 1;
+            int _startIndex = min;
+            for (int i = min; i < 15;)
+            {
+                if (_array[i] == 0)
+                    _startIndex = i + 1;
+                else if (i == _startIndex + count-1)
+                {
+                    List<int> _group = new List<int>();
+                    for (int j = _startIndex; j <= i; j++)
+                        _group.Add(j);
+                    _result.Add(_group);
+                    _startIndex += 1;
+                    i = _startIndex;
+                    continue;
+                }
+                i += 1;
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindDoubleStraight(int min, int count)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            min = min + 1;
+            int _startIndex = min;
+            for (int i = min; i < 15;)
+            {
+                if (_array[i] < 2)
+                    _startIndex = i + 1;
+                else if (i == _startIndex + count - 1)
+                {
+                    List<int> _group = new List<int>();
+                    for (int j = _startIndex; j <= i; j++)
+                    {
+                        _group.Add(j);
+                        _group.Add(j);
+                    }
+                    _result.Add(_group);
+                    _startIndex += 1;
+                    i = _startIndex;
+                    continue;
+                }
+                i += 1;
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindPlane(int min, int count)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            min = min + 1;
+            int _startIndex = min;
+            for (int i = min; i < 15;)
+            {
+                if (_array[i] != 3)
+                    _startIndex = i + 1;
+                else if (i == _startIndex + count - 1)
+                {
+                    List<int> _group = new List<int>();
+                    for (int j = _startIndex; j <= i; j++)
+                    {
+                        _group.Add(j);
+                        _group.Add(j);
+                        _group.Add(j);
+                    }
+                    _result.Add(_group);
+                    _startIndex += 1;
+                    i = _startIndex;
+                    continue;
+                }
+                i += 1;
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindPlaneBySingle(int min, int count)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            min = min + 1;
+            int _startIndex = min;
+            for (int i = min; i < 15;)
+            {
+                if (_array[i] != 3)
+                    _startIndex = i + 1;
+                else if (i == _startIndex + count - 1)
+                {
+                    int[] _temp = (int[])_array.Clone();
+                    List<int> _mainList = new List<int>();
+                    List<int> _viceList = new List<int>();
+                    for (int j = _startIndex; j <= i; j++)
+                    {
+                        _mainList.Add(j);
+                        _temp[j] = 0;
+                    }
+                    for (int j = 1; j <= 3; j++)
+                    {
+                        for (int k = 3; k < _temp.Length; k++)
+                        {
+                            if (_temp[k]==j)
+                            {
+                                int _count = j;
+                                if (_temp[k] == 3)
+                                {
+                                    if ((k + 1 == _mainList[0] || k - 1 == _mainList[_mainList.Count - 1]) && k < 15)
+                                        _count = 2;
+                                }
+                                for (int l = 0; l < _count; l++)
+                                    _viceList.Add(k);
+                            }
+                        }
+                    }
+                    if (_viceList.Count >=_mainList.Count)
+                    {
+                        List<int> _group = new List<int>();
+                        for (int j = 0; j < _mainList.Count; j++)
+                        {
+                            _group.Add(_mainList[j]);
+                            _group.Add(_mainList[j]);
+                            _group.Add(_mainList[j]);
+                            _group.Add(_viceList[j]);
+                        }
+                        _result.Add(_group);
+                        _startIndex += 1;
+                        i = _startIndex;
+                        continue;
+                    }
+                }
+                i += 1;
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+        private static List<List<int>> FindPlaneByDouble(int min, int count)
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            min = min + 1;
+            int _startIndex = min;
+            for (int i = min; i < 15;)
+            {
+                if (_array[i] != 3)
+                    _startIndex = i + 1;
+                else if (i == _startIndex + count - 1)
+                {
+                    int[] _temp = (int[])_array.Clone();
+                    List<int> _mainList = new List<int>();
+                    List<int> _viceList = new List<int>();
+                    for (int j = _startIndex; j <= i; j++)
+                    {
+                        _mainList.Add(j);
+                        _temp[j] = 0;
+                    }
+                    for (int j = 2; j <= 3; j++)
+                    {
+                        for (int k = 3; k < _temp.Length; k++)
+                        {
+                            if (_temp[k] == j)
+                                _viceList.Add(k);
+                        }
+                    }
+                    if (_viceList.Count >= _mainList.Count)
+                    {
+                        List<int> _group = new List<int>();
+                        for (int j = 0; j < _mainList.Count; j++)
+                        {
+                            _group.Add(_mainList[j]);
+                            _group.Add(_mainList[j]);
+                            _group.Add(_mainList[j]);
+                            _group.Add(_viceList[j]);
+                            _group.Add(_viceList[j]);
+                        }
+                        _result.Add(_group);
+                        _startIndex += 1;
+                        i = _startIndex;
+                        continue;
+                    }
+                }
+                i += 1;
+            }
+            if (_result.Count == 0)
+                return FindBoom(3, 4);
+            return _result;
+        }
+
+        private static List<List<int>> FindRocket()
+        {
+            List<List<int>> _result = new List<List<int>>();
+            int[] _array = Translate(spDataArray);
+            if (_array[16] + _array[17] == 2)
+                _result.Add(new List<int>() {16,17 });
             return _result;
         }
         #endregion
