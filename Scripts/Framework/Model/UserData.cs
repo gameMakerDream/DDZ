@@ -8,6 +8,6 @@ public class UserData
     public string nickName;
     public int iconIndex;
     public float coin;
-    public float currency;
+    public int currency;
     public int sex;
 }

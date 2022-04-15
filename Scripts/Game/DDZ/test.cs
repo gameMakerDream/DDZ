@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,13 @@ namespace DDZ
         // Start is called before the first frame update
     void Start()
         {
-            UserData ud = new UserData();
-            ud.userId = 1;
-            AppFacade.Instance.RegisterProxy(new UserDataProxy(ud));
-            AppFacade.Instance.RegisterProxy(new DDZMainDataProxy());
-            AppFacade.Instance.RegisterMediator(new DDZMainMediator(GameObject.Find("Canvas")));
-            SCMessage.Instance.Initialize();
-            AlgorithmHelper.HintForRun();
-
+            //UserData ud = new UserData();
+            //ud.userId = 1;
+            //AppFacade.Instance.RegisterProxy(new UserDataProxy(ud));
+            //AppFacade.Instance.RegisterProxy(new DDZMainDataProxy());
+            //AppFacade.Instance.RegisterMediator(new DDZMainMediator(GameObject.Find("Canvas")));
+            //SCMessage.Instance.Initialize();
+            //HttpHall.Instance.LoginByGuest();
             //StartCoroutine("test1");
         }
 

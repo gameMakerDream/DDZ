@@ -11,7 +11,7 @@ namespace DDZ
         protected string path = "";
         protected Dictionary<string,Tween> tweenDic=new Dictionary<string, Tween>();
         protected float[] cardWidthArray;
-        protected float[] cardHightArray;
+        protected float[] cardHeightArray;
         protected float[] cardIntervalArray;
         protected float cardOffsetY;
         protected int validChildCount
@@ -46,7 +46,7 @@ namespace DDZ
                 float _totalCardWidth = (_count - 1) * _interval + cardWidthArray[seatIndex];
                 float _groupWidth = GetComponent<RectTransform>().rect.width;
                 _x = (_groupWidth - _totalCardWidth) / 2 + cardWidthArray[seatIndex] / 2;
-                _y = -cardHightArray[seatIndex] / 2;
+                _y = -cardHeightArray[seatIndex] / 2;
             }
             for (int i = 0; i < _count; i++)
             {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Util
@@ -32,6 +30,6 @@ public class Util
         if(count<4)
              return (number / 10000).ToString("f2")+"w";
         return (number / 100000000).ToString("f2") + "y";
-
     }
+   
 }

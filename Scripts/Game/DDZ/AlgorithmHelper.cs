@@ -433,7 +433,7 @@ namespace DDZ
         private static List<List<int>> FindSingle(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
+            int[] _array = Translate(spDataArray);
             int _minCount = 1;
             int _maxCount = 3;
             min = min + 1;
@@ -456,7 +456,7 @@ namespace DDZ
         private static List<List<int>> FindDouble(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
+            int[] _array = Translate(spDataArray);
             int _minCount = 2;
             int _maxCount = 3;
             min = min + 1;
@@ -480,7 +480,7 @@ namespace DDZ
         private static List<List<int>> FindThree(int min)
         {
             List<List<int>> _result = new List<List<int>>();
-            int[] _array = new int[] { 0, 0, 0, 2, 1, 2, 1, 2, 5, 3, 4, 3, 2, 1, 3, 3, 3, 4, 3, 3 };
+            int[] _array = Translate(spDataArray);
             int _minCount = 3;
             int _maxCount = 3;
             min = min + 1;

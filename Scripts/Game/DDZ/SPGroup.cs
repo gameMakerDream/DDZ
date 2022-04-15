@@ -17,7 +17,7 @@ namespace DDZ
             else
                 this.path = "mp/mp";
             this.cardWidthArray = Constants.spCardWidth;
-            this.cardHightArray = Constants.spCardHeight;
+            this.cardHeightArray = Constants.spCardHeight;
             this.cardIntervalArray = Constants.spCardInterval;
             this.cardOffsetY = -40;
         }

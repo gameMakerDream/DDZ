@@ -13,7 +13,7 @@ namespace DDZ
             base.Initialize(seatIndex);
             this.path = "cp/chupai";
             this.cardWidthArray = Constants.cpCardWidth;
-            this.cardHightArray = Constants.cpCardHeight;
+            this.cardHeightArray = Constants.cpCardHeight;
             this.cardIntervalArray = Constants.cpCardInterval;
             this.cardOffsetY = -45;
         }

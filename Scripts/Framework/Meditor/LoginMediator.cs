@@ -9,7 +9,7 @@ public class LoginMediator : Mediator
 {
 
     public new const string NAME = "LoginMediator";
-
+    private ClientDataProxy cdp;
 
     private InputField ifAccount;
     private InputField ifPassword;
@@ -42,6 +42,7 @@ public class LoginMediator : Mediator
 
     public override void OnRegister()
     {
+        cdp = Facade.RetrieveProxy(ClientDataProxy.NAME) as ClientDataProxy;
         Debug.Log(NAME + ":×¢²á³É¹¦");
     }
 
@@ -59,7 +60,7 @@ public class LoginMediator : Mediator
     }
     private void OnClickLoginGuest()
     {
-
+        SendNotification(PublicDefine.gameCmd_Login, new object[] { LoginType.Guest, cdp.VO.account});
     }
     private void OnClickAgreement(bool value)
     {

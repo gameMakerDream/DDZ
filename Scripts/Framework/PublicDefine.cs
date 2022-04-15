@@ -30,6 +30,17 @@ public enum ServerType
     DDZ,
     MJ
 }
+public enum LoginType
+{
+    Account,
+    Wechat,
+    Guest
+}
+public enum HttpType
+{
+    Login,
+    GetUserData,
+}
 public class PublicDefine : MonoBehaviour
 {
     public const string prefabPath = "prefab/";
@@ -49,6 +60,10 @@ public class PublicDefine : MonoBehaviour
     public const string frameWorkMsg_LoadSceneProgress = "frameWorkMsg_LoadSceneProgress";
     public const string frameWorkMsg_UpdateUserData = "frameWorkMsg_UpdateUserData";
     public const string frameWorkMsg_Wait = "frameWorkMsg_Wait";
+
+
+    public const string gameCmd_Login = "gameCmd_Login";
+
 
     #endregion
 
